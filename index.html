@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KaamDwaar — Gateway to Fair Work</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A4%9D%3C/text%3E%3C/svg%3E">
+<style>
+/* ============================= TOKENS ============================= */
+:root{
+  --bg:#f5f2ea; --surface:#ffffff; --surface2:#ede8dc; --text:#20261f; --muted:#6d7266;
+  --primary:#0f6b4e; --primary2:#0b5940; --primary-soft:#e0efe6;
+  --accent:#dd8f1c; --accent-soft:#fbf0da;
+  --border:#e2dccd; --danger:#c2410c; --danger-soft:#fdeadd; --ok:#15803d; --info:#1d4ed8;
+  --shadow:0 8px 24px rgba(35,45,35,.08); --shadow-lg:0 18px 50px rgba(35,45,35,.16);
+  --r:14px;
+}
+[data-theme="dark"]{
+  --bg:#121511; --surface:#1a1f19; --surface2:#232a22; --text:#e9e7db; --muted:#9aa08f;
+  --primary:#2fa27b; --primary2:#3cb98d; --primary-soft:#17302570;
+  --accent:#e8a33d; --accent-soft:#3a2d1470;
+  --border:#2c332a; --danger:#f97316; --danger-soft:#3b241280; --ok:#4ade80; --info:#93c5fd;
+  --shadow:0 8px 24px rgba(0,0,0,.35); --shadow-lg:0 18px 50px rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:ui-sans-serif,system-ui,'Segoe UI',Roboto,'Noto Sans','Noto Sans Devanagari','Noto Sans Oriya',sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.55;font-size:15px}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+img,svg{vertical-align:middle}
+.container{max-width:1140px;margin:0 auto;padding:0 20px}
+.muted{color:var(--muted)} .small{font-size:12.5px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sp-between{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.mt{margin-top:14px}.mt-lg{margin-top:26px}.mb{margin-bottom:14px}
+a{color:inherit;text-decoration:none;cursor:pointer}
+
+/* ============================= HEADER ============================= */
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 86%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.topbar .container{display:flex;align-items:center;justify-content:space-between;gap:12px;height:112px}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer}
+.brand-logo{height:92px;width:auto;display:block}
+footer .brand-logo{height:72px}
+.brand-txt b{font-size:17px;display:block;line-height:1.1}
+.brand-txt span{font-size:11px;color:var(--muted);letter-spacing:.4px}
+.nav-actions{display:flex;align-items:center;gap:8px}
+.lang-sel{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:6px 8px;color:var(--text)}
+.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);
+  display:inline-flex;align-items:center;justify-content:center;color:var(--text)}
+.icon-btn:hover{border-color:var(--primary)}
+.user-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);
+  border-radius:999px;padding:4px 12px 4px 5px;font-weight:600;font-size:13.5px}
+.user-chip .role-tag{font-size:10.5px;color:var(--muted);font-weight:600;display:block;line-height:1}
+
+@media(max-width:760px){
+  .topbar .container{height:96px}
+  .brand-logo{height:74px;max-width:72vw}
+  footer .brand-logo{height:58px;max-width:85vw}
+}
+
+/* ============================= BUTTONS ============================= */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:11px;border:1px solid transparent;
+  padding:10px 18px;font-weight:600;font-size:14px;transition:.15s;background:var(--surface2);color:var(--text)}
+.btn:hover{filter:brightness(.97)}
+.btn-p{background:var(--primary);color:#fff}
+.btn-p:hover{background:var(--primary2);filter:none}
+.btn-ac{background:var(--accent);color:#fff}
+.btn-o{background:transparent;border-color:var(--border);color:var(--text)}
+.btn-o:hover{border-color:var(--primary);color:var(--primary)}
+.btn-g{background:transparent;color:var(--muted)}
+.btn-g:hover{color:var(--text)}
+.btn-dgr{background:var(--danger);color:#fff}
+.btn-sm{padding:6px 12px;font-size:13px;border-radius:9px}
+.btn-lg{padding:13px 24px;font-size:15.5px;border-radius:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ============================= GENERIC UI ============================= */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow)}
+.pad{padding:18px}
+.chip{display:inline-flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;color:var(--text)}
+.chip.p{background:var(--primary-soft);border-color:transparent;color:var(--primary)}
+.chip.a{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.chiprow{display:flex;flex-wrap:wrap;gap:6px}
+.vbadge{display:inline-flex;align-items:center;gap:4px;background:var(--primary-soft);color:var(--primary);
+  font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px}
+.pbadge{display:inline-flex;align-items:center;gap:4px;background:var(--accent-soft);color:var(--accent);
+  font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px}
+.avatar{width:44px;height:44px;border-radius:50%;color:#fff;font-weight:700;display:inline-flex;
+  align-items:center;justify-content:center;font-size:15px;flex:0 0 auto}
+.avatar.sm{width:34px;height:34px;font-size:12.5px}
+.avatar.lg{width:64px;height:64px;font-size:21px}
+.empty{padding:34px;text-align:center;color:var(--muted);border:1.5px dashed var(--border);border-radius:var(--r)}
+.banner{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+  color:var(--text);border-radius:12px;padding:11px 15px;font-size:13.5px;margin-bottom:16px}
+.st{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-block}
+.st-open{background:var(--primary-soft);color:var(--primary)}
+.st-hired{background:#dbeafe;color:#1d4ed8}
+[data-theme="dark"] .st-hired{background:#1e3a5f;color:#93c5fd}
+.st-done{background:var(--surface2);color:var(--muted)}
+.st-warn{background:var(--danger-soft);color:var(--danger)}
+.st-ok{background:var(--primary-soft);color:var(--ok)}
+.st-acc{background:var(--primary-soft);color:var(--ok)}
+.st-rej{background:var(--danger-soft);color:var(--danger)}
+.st-pend{background:var(--accent-soft);color:var(--accent)}
+.stars{color:var(--accent);font-size:13px;letter-spacing:1px}
+.stars b{color:var(--text)}
+
+/* ============================= FORMS ============================= */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:700;margin-bottom:5px;color:var(--text)}
+.input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);
+  color:var(--text);outline:none;transition:.15s}
+.input:focus{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
+textarea.input{resize:vertical;min-height:84px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.form-grid .full{grid-column:1/-1}
+.chk{display:inline-flex;cursor:pointer}
+.chk input{display:none}
+.chk span{display:inline-block;background:var(--surface2);border:1.5px solid var(--border);border-radius:999px;
+  padding:5px 13px;font-size:12.5px;font-weight:600;transition:.12s;color:var(--text)}
+.chk input:checked+span{background:var(--primary);border-color:var(--primary);color:#fff}
+.chip-sel{display:flex;flex-wrap:wrap;gap:7px}
+.checkline{display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer;font-weight:600}
+.checkline input{width:16px;height:16px;accent-color:var(--primary)}
+.hint{font-size:12px;color:var(--muted);margin-top:4px}
+.fair-hint{background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:12.5px;
+  border-radius:9px;padding:8px 12px;margin-top:6px;display:none}
+
+/* ============================= HERO / HOME ============================= */
+.sec{padding:54px 0}
+.hero{padding:64px 0 46px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-140px;top:-120px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--accent) 22%,transparent),transparent 70%)}
+.hero::after{content:"";position:absolute;left:-160px;bottom:-160px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--primary) 18%,transparent),transparent 70%)}
+.hero .container{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center;position:relative;z-index:1}
+.kicker{display:inline-flex;align-items:center;gap:7px;background:var(--primary-soft);color:var(--primary);
+  font-weight:700;font-size:12.5px;border-radius:999px;padding:6px 14px;margin-bottom:18px}
+.hero h1{font-size:clamp(30px,4.6vw,46px);line-height:1.14;letter-spacing:-.5px}
+.hero h1 .c-p{color:var(--primary)} .hero h1 .c-a{color:var(--accent)}
+.hero-sub{margin:16px 0 24px;color:var(--muted);font-size:16px;max-width:520px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-art{position:relative;min-height:340px}
+.mock{position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  box-shadow:var(--shadow-lg);padding:16px;width:270px;pointer-events:none}
+.mock-worker{top:18px;right:34px;transform:rotate(2.5deg)}
+.mock-job{top:150px;left:0;transform:rotate(-3deg)}
+.float-chip{position:absolute;right:6px;bottom:16px;background:var(--accent);color:#fff;font-weight:800;
+  font-size:12.5px;padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-lg);transform:rotate(-2deg)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{text-align:center;padding:18px 10px}
+.stat b{font-size:26px;display:block;color:var(--primary)}
+.stat span{font-size:12.5px;color:var(--muted);font-weight:600}
+.sec-hd{text-align:center;max-width:640px;margin:0 auto 30px}
+.sec-hd h2{font-size:clamp(22px,3vw,30px);letter-spacing:-.4px}
+.sec-hd p{color:var(--muted);margin-top:8px}
+.steps{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;align-items:center}
+.step{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);
+  border-radius:999px;padding:8px 15px;font-size:13px;font-weight:600;box-shadow:var(--shadow)}
+.step-n{width:21px;height:21px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;
+  display:inline-flex;align-items:center;justify-content:center;font-weight:800}
+.step-arrow{color:var(--muted);font-weight:700}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat{padding:22px;transition:.18s}
+.feat:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.feat-ic{font-size:26px;width:50px;height:50px;border-radius:13px;background:var(--primary-soft);
+  display:flex;align-items:center;justify-content:center;margin-bottom:13px}
+.feat b{font-size:15.5px;display:block;margin-bottom:5px}
+.feat p{font-size:13.5px;color:var(--muted)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);
+  padding:9px 12px;border-bottom:2px solid var(--border)}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--border)}
+.tbl tr:last-child td{border-bottom:none}
+.cta-band{text-align:center;padding:48px 20px}
+footer{border-top:1px solid var(--border);padding:26px 0;text-align:center;color:var(--muted);font-size:13px}
+footer .brand{justify-content:center;margin-bottom:8px}
+
+/* ============================= AUTH ============================= */
+.auth-wrap{max-width:560px;margin:44px auto;padding:0 20px}
+.auth-card{padding:28px}
+.auth-card h2{font-size:22px;margin-bottom:4px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 18px}
+.role-card{border:2px solid var(--border);border-radius:13px;padding:16px;text-align:center;cursor:pointer;transition:.14s;background:var(--surface)}
+.role-card .rc-ic{font-size:26px}
+.role-card b{display:block;margin-top:6px;font-size:15px}
+.role-card span{font-size:12px;color:var(--muted)}
+.role-card.sel{border-color:var(--primary);background:var(--primary-soft)}
+.demo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.demo-card{border:1px solid var(--border);border-radius:12px;padding:11px;font-size:12px;text-align:center;background:var(--surface2)}
+.demo-card b{display:block;font-size:12.5px}
+.demo-card .muted{display:block;margin:2px 0 7px;font-size:11px;word-break:break-all}
+
+/* ============================= DASHBOARD ============================= */
+.dash{padding:26px 0 60px}
+.dhead{padding:20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.dhead h2{font-size:20px;line-height:1.2}
+.dhead .sub{font-size:13px;color:var(--muted)}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+.tab{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:999px;
+  padding:8px 16px;font-size:13.5px;font-weight:600;transition:.14s;display:inline-flex;align-items:center;gap:7px}
+.tab:hover{border-color:var(--primary);color:var(--primary)}
+.tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.tcount{background:var(--danger);color:#fff;font-size:10.5px;font-weight:800;border-radius:999px;
+  padding:1px 7px;min-width:18px;text-align:center}
+.filterbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.filterbar .input{width:auto;min-width:150px;padding:8px 11px}
+.filterbar .grow{flex:1;min-width:180px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.jcard{padding:17px;display:flex;flex-direction:column;gap:10px}
+.jcard h3{font-size:15.5px;line-height:1.3}
+.jcard-ft{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.wcard{padding:17px;display:flex;flex-direction:column;gap:10px}
+.wcard-hd{display:flex;gap:12px;align-items:center}
+.approw{display:flex;gap:14px;align-items:center;padding:15px 17px;flex-wrap:wrap}
+.approw .grow{flex:1;min-width:200px}
+.ocard{padding:17px;display:flex;flex-direction:column;gap:9px}
+.quote{border-left:3px solid var(--accent);background:var(--surface2);border-radius:0 9px 9px 0;
+  padding:8px 12px;font-size:13px;color:var(--muted);font-style:italic}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.scard{padding:17px;text-align:center}
+.scard b{font-size:25px;color:var(--primary);display:block}
+.scard span{font-size:12px;color:var(--muted);font-weight:600}
+.comprow{padding:16px 17px;display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+
+/* ============================= CHAT ============================= */
+.chat-wrap{display:grid;grid-template-columns:280px 1fr;border:1px solid var(--border);border-radius:var(--r);
+  overflow:hidden;background:var(--surface);min-height:440px;box-shadow:var(--shadow)}
+.threads{border-right:1px solid var(--border);background:var(--surface2);overflow-y:auto;max-height:520px}
+.thread{display:flex;gap:10px;padding:12px 14px;cursor:pointer;border-bottom:1px solid var(--border);align-items:center}
+.thread:hover{background:color-mix(in srgb,var(--surface) 55%,transparent)}
+.thread.active{background:var(--surface)}
+.thread .grow{flex:1;min-width:0}
+.thread b{font-size:13.5px;display:block}
+.thread .prev{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.chat-pane{display:flex;flex-direction:column;min-height:440px}
+.chat-hd{padding:12px 16px;border-bottom:1px solid var(--border);font-weight:700;display:flex;gap:10px;align-items:center}
+.chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:9px;max-height:360px;min-height:300px}
+.bubble{max-width:74%;padding:9px 13px;border-radius:15px;font-size:13.5px;box-shadow:var(--shadow)}
+.bubble.me{align-self:flex-end;background:var(--primary);color:#fff;border-bottom-right-radius:4px}
+.bubble.them{align-self:flex-start;background:var(--surface2);border-bottom-left-radius:4px}
+.bubble time{display:block;font-size:10px;opacity:.65;margin-top:3px}
+.chat-in{display:flex;gap:8px;padding:11px;border-top:1px solid var(--border)}
+.chat-in .input{flex:1}
+
+/* ============================= CV ============================= */
+.cv{background:#fff;color:#1c211b;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.cv-hd{background:var(--primary);color:#fff;padding:24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.cv-hd .avatar{background:#ffffff30;border:2px solid #fff8}
+.cv-hd h3{font-size:21px;line-height:1.2}
+.cv-hd .sub{opacity:.9;font-size:13px}
+.cv-body{padding:22px;display:grid;grid-template-columns:1.5fr 1fr;gap:22px}
+.cv-sec h4{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:#0f6b4e;margin-bottom:8px;
+  border-bottom:2px solid #e5efe8;padding-bottom:4px}
+.cv-sec{margin-bottom:18px}
+.cv-line{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0;gap:10px}
+.cv-line b{color:#52584e;font-weight:600}
+.rev{border-left:3px solid #dd8f1c;padding:6px 11px;margin-bottom:9px;background:#faf7ef;border-radius:0 8px 8px 0;font-size:13px}
+.rev .muted{font-size:11.5px;display:block;margin-top:2px}
+.cv-foot{padding:12px 22px;background:#f4f7f3;font-size:11.5px;color:#6d7266}
+
+/* ============================= MODAL / TOAST ============================= */
+.overlay{position:fixed;inset:0;background:rgba(15,20,15,.55);backdrop-filter:blur(3px);z-index:100;
+  display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;max-width:600px;width:100%;
+  max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:pop .18s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-hd{display:flex;justify-content:space-between;align-items:center;padding:17px 20px;border-bottom:1px solid var(--border)}
+.modal-hd b{font-size:16px}
+.xbtn{background:none;border:none;font-size:20px;color:var(--muted);line-height:1}
+.modal-bd{padding:20px}
+#toast-root{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:200;display:flex;
+  flex-direction:column;gap:8px;align-items:center}
+.toast{background:var(--text);color:var(--bg);padding:11px 20px;border-radius:999px;font-size:13.5px;font-weight:600;
+  box-shadow:var(--shadow-lg);animation:toastin .25s ease;max-width:90vw;text-align:center}
+@keyframes toastin{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+.rate-stars{font-size:32px;letter-spacing:4px;text-align:center;margin:8px 0 14px}
+.rate-stars span{cursor:pointer;color:var(--border);transition:.1s}
+.rate-stars span.on{color:var(--accent)}
+
+/* ============================= PRINT (CV) ============================= */
+#print-area{display:none}
+@media print{
+  body.print-cv>header,body.print-cv>#view,body.print-cv>footer,#modal-root,#toast-root{display:none!important}
+  body.print-cv{background:#fff}
+  body.print-cv #print-area{display:block!important}
+  .cv{border:none;border-radius:0}
+}
+
+/* ============================= RESPONSIVE ============================= */
+@media(max-width:960px){
+  .hero .container{grid-template-columns:1fr}
+  .hero-art{display:none}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .cards{grid-template-columns:1fr}
+  .stats,.stat-grid{grid-template-columns:1fr 1fr}
+  .chat-wrap{grid-template-columns:1fr}
+  .threads{max-height:190px;border-right:none;border-bottom:1px solid var(--border)}
+  .cv-body{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .feat-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .demo-grid{grid-template-columns:1fr}
+  .role-grid{grid-template-columns:1fr}
+  .brand-txt span{display:none}
+  .user-chip .uc-txt{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar" id="topbar"></header>
+<main id="view"></main>
+<footer>
+  <div class="container">
+    <div class="brand" onclick="go('home')">
+      <svg class="brand-logo" width="400" height="72" viewBox="70 70 1360 390" role="img" aria-label="KaamDwaar logo" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="kdgf" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#0F766E"/><stop offset="1" stop-color="#22C55E"/></linearGradient></defs><g transform="translate(95 95) scale(.78)"><rect width="330" height="330" rx="78" fill="#ECFDF5"/><path d="M86 273V150C86 83 128 48 165 48s79 35 79 102v123" fill="none" stroke="url(#kdgf)" stroke-width="34" stroke-linecap="round"/><path d="M121 273V162c0-38 23-60 44-60s44 22 44 60v111" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="8"/><path d="M165 163c-18 51-38 86-65 110h130c-27-24-47-59-65-110z" fill="#D1FAE5"/><rect x="106" y="210" width="118" height="76" rx="18" fill="#0F766E"/><path d="M140 210v-17c0-16 13-29 29-29h-8c16 0 29 13 29 29v17" fill="none" stroke="#0F766E" stroke-width="17" stroke-linecap="round"/><rect x="154" y="210" width="23" height="76" rx="7" fill="#22C55E"/><circle cx="165" cy="248" r="9" fill="#FFFFFF"/></g><text x="385" y="195" font-family="Arial,Helvetica,sans-serif" font-size="118" font-weight="900" letter-spacing="-2.5" fill="#0F172A">Kaam<tspan fill="#0F766E">Dwaar</tspan></text><text x="392" y="270" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="900" fill="#0F766E">Gateway to fair work</text><text x="392" y="342" font-family="Arial,Helvetica,sans-serif" font-size="40" font-weight="900" fill="#475569">Trusted workers · Verified jobs · Cooperative support</text></svg>
+    </div>
+    <div id="foot-tag"></div>
+    <div id="foot-note" class="small" style="margin-top:4px"></div>
+  </div>
+</footer>
+
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+<div id="print-area"></div>
+
+<script type="application/json" id="pkg-data">
+{"skills":["Electrician","Plumber","Mason","Carpenter","Painter","Tailor","Farm Worker","Labour","Cook / Catering","Loader / Helper","Housekeeping","Driver","Mechanic"],"cities":["Bhubaneswar","Cuttack","Puri","Rourkela","Berhampur","Sambalpur","Balasore","Baripada","Jharsuguda","Angul"],"fair":{"Electrician":[650,850],"Plumber":[600,800],"Mason":[600,800],"Carpenter":[650,850],"Painter":[550,750],"Tailor":[450,650],"Farm Worker":[400,550],"Labour":[400,550],"Cook / Catering":[500,700],"Loader / Helper":[400,550],"Housekeeping":[400,550],"Driver":[550,750],"Mechanic":[600,800]}}
+</script>
+<script type="application/json" id="pkg-i18n">
+{"en":{"tag_short":"Cooperative Service Marketplace","nav_home":"Home","nav_dash":"Dashboard","nav_login":"Login","nav_signup":"Sign Up","nav_logout":"Logout","hero_kicker":"A cooperative-owned digital marketplace","hero_t1":"Find trusted workers.","hero_t2":"Find fair work.","hero_t3":"Build stronger cooperatives.","hero_sub":"KaamDwaar connects verified workers with employers — with fair wages, worker welfare and trust built into every job.","cta_findwork":"Find Work","cta_hire":"Hire Workers","stat_workers":"Verified workers","stat_contractors":"Employers","stat_openjobs":"Open jobs","stat_completed":"Jobs completed","how_title":"How it works","how_sub":"From sign-up to fair payment in eight simple steps.","how_s1":"Sign Up","how_s2":"Choose Worker or Employer","how_s3":"Create your profile","how_s4":"Cooperative verification","how_s5":"Add your location","how_s6":"Find / post jobs","how_s7":"Hire or apply","how_s8":"Work · Pay · Rate","feat_title":"Everything a fair labour market needs","feat_sub":"Built around trust, transparency and worker welfare.","feat1_t":"Verified profiles","feat1_d":"Every worker is verified by the cooperative before they can be hired.","feat2_t":"Job marketplace","feat2_d":"Search nearby jobs and workers; filter by skill, location, wage and availability.","feat3_t":"Hiring & chat","feat3_d":"Send offers, accept jobs and message each other — all in one place.","feat4_t":"Fair wage guidance","feat4_d":"Suggested fair-wage ranges for every skill keep pay honest.","feat5_t":"Ratings & reviews","feat5_d":"Two-way ratings after every job build reputations that matter.","feat6_t":"Welfare & support","feat6_d":"Insurance, health camps and a complaint desk run by the cooperative.","fair_title":"Fair wage reference","fair_note":"Suggested daily rates published by the cooperative to keep pay fair.","fair_skill":"Skill","fair_range":"Suggested ₹ / day","cta_title":"Ready to join the cooperative?","cta_sub":"Create a free account in under a minute.","foot_note":"Prototype demo — all data is stored locally in your browser.","login_title":"Welcome back","login_sub":"Login to continue to your dashboard.","signup_title":"Create your account","signup_sub":"Join as a worker or an employer.","role_q":"I am joining as","role_worker":"Worker","role_worker_d":"Find fair work near me","role_contractor":"Employer","role_contractor_d":"Hire verified workers","f_name":"Full name","f_email":"Email","f_phone":"Phone","f_pass":"Password","f_city":"City / Location","f_coop":"I am a member of a cooperative society","f_coopid":"Membership ID","f_skills":"Skills","f_exp":"Years of experience","f_wage_exp":"Expected wage (₹/day)","f_avail":"Availability","f_company":"Company / employer name","f_services":"Services you need","f_days":"Duration (days)","unit_day":"Per day","unit_job":"Fixed payment","btn_create":"Create account","btn_login":"Login","have_acc":"Already have an account? Login","new_here":"New here? Create an account","demo_title":"Try a demo account (one-click login)","av_full":"Full-time","av_part":"Part-time","av_wknd":"Weekends","pending_banner":"⏳ Your profile is pending verification by the cooperative admin. You can still browse and apply for jobs meanwhile.","tw_jobs":"Find Work","tw_apps":"My Applications","tw_offers":"Offers","tw_msgs":"Messages","tw_cv":"My CV","tw_welfare":"Welfare","tc_workers":"Browse Workers","tc_post":"Post a Job","tc_jobs":"My Jobs","tc_offers":"Offers Sent","tc_msgs":"Messages","ta_over":"Overview","ta_ver":"Verifications","ta_jobs":"Jobs Monitor","ta_comp":"Complaints","lbl_search":"Search…","lbl_skill":"Skill","lbl_city":"City","lbl_wage":"Wage","lbl_avail":"Availability","all":"All","wage_any":"Any wage","lbl_veronly":"Verified only","lbl_jobtitle":"Job title","lbl_wage_amt":"Wage (₹)","apply":"Apply","applied":"Applied ✓","btn_details":"Details","per_day":"/day","per_job":"/job","posted_by":"Posted by","applicants_lbl":"Applicants","btn_hire":"Hire","btn_offer":"Send Offer","btn_chat":"Chat","btn_profile":"View Profile","no_jobs":"No jobs match your filters right now.","no_workers":"No workers match your filters.","status_open":"Open","status_hired":"Hired","status_done":"Completed","lbl_duration":"Duration","days":"days","lbl_desc":"Description","apply_now":"Apply now","fair_hint":"Fair wage for this skill: ₹{1}–₹{2} per day","no_apps":"You haven't applied to any jobs yet.","offer_lbl":"Offer","accept":"Accept","reject":"Reject","st_pending":"Pending","st_accepted":"Accepted","st_rejected":"Rejected","no_offers":"No offers yet.","offer_msg_ph":"Add a short message (optional)","offer_job_lbl":"Select a job","btn_send_offer":"Send offer","offer_sent":"Offer sent ✓","no_offer_jobs":"You have no open jobs. Post a job first.","no_coffers":"You haven't sent any offers yet. Browse workers to send one.","job_full":"Position filled","applied_on":"Applied","msg_title":"Messages","msg_ph":"Write a message…","btn_send":"Send","no_threads":"Choose a contact below and send your first message.","msg_empty":"Select a conversation or start a new one 👋","cv_lbl":"My CV","cv_auto":"Auto-generated from your profile","btn_print":"🖨️ Print / Save PDF","lbl_exp":"Experience","lbl_reviews":"Reviews","lbl_contact":"Contact","lbl_expected":"Expected wage","verified_lbl":"Verified","pending_lbl":"Verification pending","yrs":"yrs","new_lbl":"New","primary_role":"Primary role","coop_member":"Cooperative member","cv_sum":"Summary","gen_by":"Generated by KaamDwaar · Cooperative Service Marketplace","no_reviews":"No reviews yet.","wel_title":"Welfare & Fair Wages","scheme_t":"Worker welfare schemes","scheme1_t":"Accident insurance","scheme1_d":"₹2 lakh coverage for verified members.","scheme2_t":"Health camps","scheme2_d":"Free monthly check-up camps in every district.","scheme3_t":"Skill training","scheme3_d":"Free upskilling workshops & certification.","scheme4_t":"Pension & savings","scheme4_d":"Small monthly savings with matching cooperative contribution.","report_t":"Report an issue","rt_payment":"Payment issue","rt_workplace":"Workplace issue","rt_other":"Other","f_against":"Against (person / company / job)","f_report_d":"What happened?","btn_report":"Submit report","my_reports":"My reports","st_open":"Open","st_resolved":"Resolved","report_toast":"Report submitted. The cooperative admin will follow up.","no_reports":"You have no reports yet.","rate_title":"Rate your experience","f_comment":"Share details (optional)","btn_rate":"Submit rating","rate_toast":"Thanks for your rating ⭐","rate_worker":"Rate worker","rate_contractor":"Rate employer","pay_title":"Complete job & pay","f_amount":"Amount (₹)","btn_pay":"Confirm payment","pay_toast":"Payment recorded, job completed ✓","btn_complete":"Complete & Pay","paid_lbl":"Paid","ad_pending_t":"Pending verifications","btn_verify":"Verify","ad_none":"No pending verifications — all caught up 🎉","ad_over":"Cooperative overview","s_workers":"Workers","s_verified":"Verified","s_pending":"Pending","s_contractors":"Employers","s_activejobs":"Active jobs","s_donejobs":"Completed jobs","s_complaints":"Open complaints","s_jobs":"Total jobs","ad_jobs_t":"All jobs monitor","below_fair":"⚠ Below fair wage","fair_ok":"Fair ✓","ad_comp_t":"Complaints & reports","btn_resolve":"Mark resolved","ad_nocomp":"No complaints. Everyone's happy 🎉","reported_by":"Reported by","no_desc":"No description provided.","toast_welcome":"Welcome, {1} 👋","toast_logout":"Logged out","toast_applied":"Application sent ✓","toast_offeracc":"Offer accepted — you're hired! 🎉","toast_offerrej":"Offer declined","toast_hired":"Worker hired 🎉","toast_verified":"Worker verified ✓","toast_resolved":"Complaint resolved ✓","toast_jobposted":"Job posted ✓","toast_rating":"Rating submitted ⭐","err_login":"Incorrect email or password","err_fields":"Please fill in all required fields","err_skill":"Please select at least one skill","err_dup":"An account with this email already exists","member_since":"Member","chat_with":"Chat with"},"hi":{"tag_short":"सहकारी सेवा बाज़ार","nav_home":"होम","nav_dash":"डैशबोर्ड","nav_login":"लॉगिन","nav_signup":"साइन अप","nav_logout":"लॉगआउट","hero_kicker":"सहकारी समिति का स्वामित्व वाला डिजिटल बाज़ार","hero_t1":"भरोसेमंद कामगार खोजें।","hero_t2":"उचित काम खोजें।","hero_t3":"मज़बूत सहकारी समिति बनाएँ।","hero_sub":"KaamDwaar सत्यापित कामगारों को नियोक्ताओं से जोड़ता है — हर काम में उचित मज़ूरी, कल्याण और भरोसे के साथ।","cta_findwork":"काम खोजें","cta_hire":"कामगार भर्ती करें","stat_workers":"सत्यापित कामगार","stat_contractors":"नियोक्ता","stat_openjobs":"खुले काम","stat_completed":"पूरे हुए काम","how_title":"यह कैसे काम करता है","how_sub":"साइन-अप से भुगतान तक — आठ आसान कदम।","how_s1":"साइन अप","how_s2":"कामगार या नियोक्ता चुनें","how_s3":"प्रोफ़ाइल बनाएँ","how_s4":"सहकारी सत्यापन","how_s5":"स्थान जोड़ें","how_s6":"काम खोजें / पोस्ट करें","how_s7":"भर्ती या आवेदन","how_s8":"काम · भुगतान · रेटिंग","feat_title":"एक निष्पक्ष श्रम बाज़ार की हर ज़रूरत","feat_sub":"भरोसे, पारदर्शिता और कामगार कल्याण पर आधारित।","feat1_t":"सत्यापित प्रोफ़ाइल","feat1_d":"हर कामगार को भर्ती से पहले सहकारी समिति सत्यापित करती है।","feat2_t":"जॉब मार्केटप्लेस","feat2_d":"नज़दीकी काम और कामगार खोजें; कौशल, स्थान, मज़ूरी और उपलब्धता से फ़िल्टर करें।","feat3_t":"भर्ती और चैट","feat3_d":"ऑफ़र भेजें, काम स्वीकारें और आपस में संदेश भेजें — सब एक ही जगह।","feat4_t":"उचित मज़ूरी मार्गदर्शन","feat4_d":"हर कौशल के लिए सुझाई गई मज़ूरी सीमा भुगतान को निष्पक्ष रखती है।","feat5_t":"रेटिंग और समीक्षा","feat5_d":"हर काम के बाद दोतरफ़ा रेटिंग से भरोसेमंद पहचान बनती है।","feat6_t":"कल्याण और सहायता","feat6_d":"बीमा, स्वास्थ्य शिविर और शिकायत सेवा — सहकारी समिति द्वारा।","fair_title":"उचित मज़ूरी सूची","fair_note":"निष्पक्ष भुगतान के लिए सहकारी समिति द्वारा सुझाई गई दैनिक दरें।","fair_skill":"कौशल","fair_range":"सुझाई गई ₹ / दिन","cta_title":"सहकारी समिति से जुड़ने के लिए तैयार?","cta_sub":"एक मिनट में मुफ़्त खाता बनाएँ।","foot_note":"प्रोटोटाइप डेमो — सारा डेटा आपके ब्राउज़र में स्थानीय रूप से संग्रहीत होता है।","login_title":"फिर से स्वागत है","login_sub":"अपने डैशबोर्ड में जाने के लिए लॉगिन करें।","signup_title":"अपना खाता बनाएँ","signup_sub":"कामगार या नियोक्ता के रूप में जुड़ें।","role_q":"मैं इस रूप में जुड़ रहा/रही हूँ","role_worker":"कामगार","role_worker_d":"मेरे पास उचित काम खोजें","role_contractor":"नियोक्ता","role_contractor_d":"सत्यापित कामगार भर्ती करें","f_name":"पूरा नाम","f_email":"ईमेल","f_phone":"फ़ोन","f_pass":"पासवर्ड","f_city":"शहर / स्थान","f_coop":"मैं किसी सहकारी समिति का सदस्य हूँ","f_coopid":"सदस्यता आईडी","f_skills":"कौशल","f_exp":"अनुभव (वर्ष)","f_wage_exp":"अपेक्षित मज़ूरी (₹/दिन)","f_avail":"उपलब्धता","f_company":"कंपनी / व्यवसाय का नाम","f_services":"आप किन सेवाओं के लिए भर्ती करते हैं","f_days":"अवधि (दिन)","unit_day":"प्रति दिन","unit_job":"निश्चित भुगतान","btn_create":"खाता बनाएँ","btn_login":"लॉगिन","have_acc":"पहले से खाता है? लॉगिन करें","new_here":"नए हैं? खाता बनाएँ","demo_title":"डेमो खाता आज़माएँ (एक-क्लिक लॉगिन)","av_full":"पूर्णकालिक","av_part":"अंशकालिक","av_wknd":"सप्ताहांत","pending_banner":"⏳ आपकी प्रोफ़ाइल सहकारी प्रशासन द्वारा सत्यापन की प्रतीक्षा में है। तब तक आप काम देख और आवेदन कर सकते हैं।","tw_jobs":"काम खोजें","tw_apps":"मेरे आवेदन","tw_offers":"ऑफ़र","tw_msgs":"संदेश","tw_cv":"मेरा सीवी","tw_welfare":"कल्याण","tc_workers":"कामगार देखें","tc_post":"काम पोस्ट करें","tc_jobs":"मेरे काम","tc_offers":"भेजे गए ऑफ़र","tc_msgs":"संदेश","ta_over":"अवलोकन","ta_ver":"सत्यापन","ta_jobs":"काम निगरानी","ta_comp":"शिकायतें","lbl_search":"खोजें…","lbl_skill":"कौशल","lbl_city":"शहर","lbl_wage":"मज़ूरी","lbl_avail":"उपलब्धता","all":"सभी","wage_any":"कोई भी मज़ूरी","lbl_veronly":"केवल सत्यापित","lbl_jobtitle":"काम का शीर्षक","lbl_wage_amt":"मज़ूरी (₹)","apply":"आवेदन करें","applied":"आवेदन हुआ ✓","btn_details":"विवरण","per_day":"/दिन","per_job":"/काम","posted_by":"पोस्ट किया","applicants_lbl":"आवेदक","btn_hire":"भर्ती करें","btn_offer":"ऑफ़र भेजें","btn_chat":"चैट","btn_profile":"प्रोफ़ाइल देखें","no_jobs":"आपके फ़िल्टर से कोई काम नहीं मिला।","no_workers":"आपके फ़िल्टर से कोई कामगार नहीं मिला।","status_open":"खुला","status_hired":"भर्ती हुआ","status_done":"पूर्ण","lbl_duration":"अवधि","days":"दिन","lbl_desc":"विवरण","apply_now":"अभी आवेदन करें","fair_hint":"इस कौशल की उचित मज़ूरी: ₹{1}–₹{2} प्रति दिन","no_apps":"आपने अभी तक किसी काम के लिए आवेदन नहीं किया है।","offer_lbl":"ऑफ़र","accept":"स्वीकारें","reject":"अस्वीकारें","st_pending":"लंबित","st_accepted":"स्वीकृत","st_rejected":"अस्वीकृत","no_offers":"अभी कोई ऑफ़र नहीं।","offer_msg_ph":"छोटा संदेश जोड़ें (वैकल्पिक)","offer_job_lbl":"काम चुनें","btn_send_offer":"ऑफ़र भेजें","offer_sent":"ऑफ़र भेजा गया ✓","no_offer_jobs":"कोई खुला काम नहीं है। पहले काम पोस्ट करें।","no_coffers":"आपने अभी कोई ऑफ़र नहीं भेजा है। कामगार देखकर ऑफ़र भेजें।","job_full":"पद भर गया","applied_on":"आवेदन","msg_title":"संदेश","msg_ph":"संदेश लिखें…","btn_send":"भेजें","no_threads":"अभी कोई बातचीत नहीं। किसी काम, ऑफ़र या प्रोफ़ाइल से शुरू करें।","msg_empty":"कोई बातचीत चुनें या नई शुरू करें 👋","cv_lbl":"मेरा सीवी","cv_auto":"आपकी प्रोफ़ाइल से स्वतः बनाया गया","btn_print":"🖨️ प्रिंट / पीडीएफ़ सहेजें","lbl_exp":"अनुभव","lbl_reviews":"समीक्षाएँ","lbl_contact":"संपर्क","lbl_expected":"अपेक्षित मज़ूरी","verified_lbl":"सत्यापित","pending_lbl":"सत्यापन लंबित","yrs":"वर्ष","new_lbl":"नया","primary_role":"मुख्य कौशल","coop_member":"सहकारी सदस्य","cv_sum":"सारांश","gen_by":"KaamDwaar द्वारा निर्मित · सहकारी सेवा बाज़ार","no_reviews":"अभी कोई समीक्षा नहीं।","wel_title":"कल्याण और उचित मज़ूरी","scheme_t":"कामगार कल्याण योजनाएँ","scheme1_t":"दुर्घटना बीमा","scheme1_d":"सत्यापित सदस्यों के लिए ₹2 लाख कवरेज।","scheme2_t":"स्वास्थ्य शिविर","scheme2_d":"हर ज़िले में मुफ़्त मासिक जाँच शिविर।","scheme3_t":"कौशल प्रशिक्षण","scheme3_d":"मुफ़्त कार्यशालाएँ और प्रमाणन सहायता।","scheme4_t":"पेंशन और बचत","scheme4_d":"सहकारी योगदान के साथ मासिक बचत।","report_t":"समस्या रिपोर्ट करें","rt_payment":"भुगतान संबंधी","rt_workplace":"कार्यस्थल संबंधी","rt_other":"अन्य","f_against":"किसके ख़िलाफ़ (व्यक्ति / कंपनी / काम)","f_report_d":"क्या हुआ?","btn_report":"रिपोर्ट भेजें","my_reports":"मेरी रिपोर्टें","st_open":"खुली","st_resolved":"समाधान हुआ","report_toast":"रिपोर्ट भेजी गई। सहकारी प्रशासन संपर्क करेगा।","no_reports":"आपकी कोई रिपोर्ट नहीं है।","rate_title":"अपना अनुभव रेट करें","f_comment":"विवरण साझा करें (वैकल्पिक)","btn_rate":"रेटिंग भेजें","rate_toast":"रेटिंग के लिए धन्यवाद ⭐","rate_worker":"कामगार को रेट करें","rate_contractor":"नियोक्ता को रेट करें","pay_title":"काम पूरा करें और भुगतान करें","f_amount":"राशि (₹)","btn_pay":"भुगतान पक्का करें","pay_toast":"भुगतान दर्ज, काम पूर्ण ✓","btn_complete":"पूरा करें और भुगतान करें","paid_lbl":"भुगतान हुआ","ad_pending_t":"लंबित सत्यापन","btn_verify":"सत्यापित करें","ad_none":"कोई लंबित सत्यापन नहीं — सब पूरा 🎉","ad_over":"सहकारी अवलोकन","s_workers":"कामगार","s_verified":"सत्यापित","s_pending":"लंबित","s_contractors":"नियोक्ता","s_activejobs":"सक्रिय काम","s_donejobs":"पूर्ण काम","s_complaints":"खुली शिकायतें","s_jobs":"कुल काम","ad_jobs_t":"सभी काम निगरानी","below_fair":"⚠ उचित मज़ूरी से कम","fair_ok":"उचित ✓","ad_comp_t":"शिकायतें और रिपोर्ट","btn_resolve":"समाधान हुआ","ad_nocomp":"कोई शिकायत नहीं। सब खुश हैं 🎉","reported_by":"रिपोर्ट की","no_desc":"कोई विवरण नहीं।","toast_welcome":"स्वागत है, {1} 👋","toast_logout":"लॉगआउट हुआ","toast_applied":"आवेदन भेजा गया ✓","toast_offeracc":"ऑफ़र स्वीकृत — भर्ती हो गया! 🎉","toast_offerrej":"ऑफ़र अस्वीकृत","toast_hired":"कामगार भर्ती हुआ 🎉","toast_verified":"कामगार सत्यापित ✓","toast_resolved":"शिकायत का समाधान हुआ ✓","toast_jobposted":"काम पोस्ट हुआ ✓","toast_rating":"रेटिंग भेजी गई ⭐","err_login":"ईमेल या पासवर्ड ग़लत है","err_fields":"कृपया सभी आवश्यक फ़ील्ड भरें","err_skill":"कम से कम एक कौशल चुनें","err_dup":"इस ईमेल से पहले से खाता मौजूद है","member_since":"सदस्य","chat_with":"चैट करें"},"or":{"tag_short":"ସମବାୟ ସେବା ବଜାର","nav_home":"ମୁଖପୃଷ୍ଠା","nav_dash":"ଡ୍ୟାସବୋର୍ଡ","nav_login":"ଲଗ୍ ଇନ୍","nav_signup":"ପଞ୍ଜୀକରଣ","nav_logout":"ଲଗ୍ ଆଉଟ୍","hero_kicker":"ସମବାୟ ମାଲିକାନାଧୀନ ଡିଜିଟାଲ୍ ବଜାର","hero_t1":"ବିଶ୍ୱସ୍ତ ଶ୍ରମିକ ଖୋଜନ୍ତୁ।","hero_t2":"ଉଚିତ କାମ ଖୋଜନ୍ତୁ।","hero_t3":"ଶକ୍ତିଶାଳୀ ସମବାୟ ଗଢ଼ନ୍ତୁ।","hero_sub":"KaamDwaar ସତ୍ୟାପିତ ଶ୍ରମିକଙ୍କୁ ନିୟୋକ୍ତାଙ୍କ ସହ ଯୋଡ଼େ — ପ୍ରତ୍ୟେକ କାମରେ ଉଚିତ ମଜୁରି, କଲ୍ୟାଣ ଓ ବିଶ୍ୱାସ ସହିତ।","cta_findwork":"କାମ ଖୋଜନ୍ତୁ","cta_hire":"ଶ୍ରମିକ ନିୟୋଜିତ କରନ୍ତୁ","stat_workers":"ସତ୍ୟାପିତ ଶ୍ରମିକ","stat_contractors":"ନିୟୋକ୍ତା","stat_openjobs":"ଖୋଲା କାମ","stat_completed":"ସମ୍ପୂର୍ଣ୍ଣ କାମ","how_title":"ଏହା କିପରି କାମ କରେ","how_sub":"ସାଇନ୍ ଅପ୍ ଠାରୁ ଭୁଗତାନ ପର୍ଯ୍ୟନ୍ତ — ଆଠଟି ସହଜ ପଦକ୍ଷେପ।","how_s1":"ସାଇନ୍ ଅପ୍","how_s2":"ଶ୍ରମିକ କିମ୍ବା ନିୟୋକ୍ତା ବାଛନ୍ତୁ","how_s3":"ପ୍ରୋଫାଇଲ୍ ଗଢ଼ନ୍ତୁ","how_s4":"ସମବାୟ ସତ୍ୟାପନ","how_s5":"ସ୍ଥାନ ଯୋଡ଼ନ୍ତୁ","how_s6":"କାମ ଖୋଜନ୍ତୁ / ପୋଷ୍ଟ କରନ୍ତୁ","how_s7":"ନିୟୋଜନ କିମ୍ବା ଆବେଦନ","how_s8":"କାମ · ଭୁଗତାନ · ରେଟିଂ","feat_title":"ଏକ ନ୍ୟାୟୀ ଶ୍ରମ ବଜାର ପାଇଁ ସବୁକିଛି","feat_sub":"ବିଶ୍ୱାସ, ସ୍ୱଚ୍ଛତା ଓ ଶ୍ରମିକ କଲ୍ୟାଣ ଉପରେ ଆଧାରିତ।","feat1_t":"ସତ୍ୟାପିତ ପ୍ରୋଫାଇଲ୍","feat1_d":"ନିୟୋଜନ ପୂର୍ବରୁ ପ୍ରତ୍ୟେକ ଶ୍ରମିକଙ୍କୁ ସମବାୟ ସତ୍ୟାପନ କରେ।","feat2_t":"ଜବ୍ ମାର୍କେଟପ୍ଲେସ୍","feat2_d":"ନିକଟସ୍ଥ କାମ ଓ ଶ୍ରମିକ ଖୋଜନ୍ତୁ; ଦକ୍ଷତା, ସ୍ଥାନ, ମଜୁରି ଓ ଉପଲବ୍ଧତା ଅନୁସାରେ ଫିଲ୍ଟର କରନ୍ତୁ।","feat3_t":"ନିୟୋଜନ ଓ ଚାଟ୍","feat3_d":"ଅଫର ପଠାନ୍ତୁ, କାମ ଗ୍ରହଣ କରନ୍ତୁ ଏବଂ ପରସ୍ପର ବାର୍ତ୍ତା କରନ୍ତୁ — ସବୁ ଗୋଟିଏ ଜାଗାରେ।","feat4_t":"ଉଚିତ ମଜୁରି ମାର୍ଗଦର୍ଶନ","feat4_d":"ପ୍ରତ୍ୟେକ ଦକ୍ଷତା ପାଇଁ ପରାମର୍ଶିତ ମଜୁରି ସୀମା ଭୁଗତାନକୁ ନ୍ୟାୟୀ ରଖେ।","feat5_t":"ରେଟିଂ ଓ ସମୀକ୍ଷା","feat5_d":"ପ୍ରତ୍ୟେକ କାମ ପରେ ଦ୍ୱିପାକ୍ଷିକ ରେଟିଂ ବିଶ୍ୱାସ ଗଢ଼େ।","feat6_t":"କଲ୍ୟାଣ ଓ ସହାୟତା","feat6_d":"ବୀମା, ସ୍ୱାସ୍ଥ୍ୟ ଶିବିର ଓ ଅଭିଯୋଗ ସେବା — ସମବାୟ ଦ୍ୱାରା ପରିଚାଳିତ।","fair_title":"ଉଚିତ ମଜୁରି ତାଲିକା","fair_note":"ନ୍ୟାୟୀ ଭୁଗତାନ ପାଇଁ ସମବାୟ ଦ୍ୱାରା ପରାମର୍ଶିତ ଦୈନିକ ହାର।","fair_skill":"ଦକ୍ଷତା","fair_range":"ପରାମର୍ଶିତ ₹ / ଦିନ","cta_title":"ସମବାୟରେ ଯୋଗ ଦେବାକୁ ପ୍ରସ୍ତୁତ?","cta_sub":"ଏକ ମିନିଟ୍ ମଧ୍ୟରେ ମାଗଣା ଖାତା ଖୋଲନ୍ତୁ।","foot_note":"ପ୍ରୋଟୋଟାଇପ୍ ଡେମୋ — ସମସ୍ତ ତଥ୍ୟ ଆପଣଙ୍କ ବ୍ରାଉଜରରେ ସ୍ଥାନୀୟ ଭାବେ ସଂରକ୍ଷିତ।","login_title":"ପୁଣି ସ୍ୱାଗତ","login_sub":"ଡ୍ୟାସବୋର୍ଡକୁ ଯିବା ପାଇଁ ଲଗ୍ ଇନ୍ କରନ୍ତୁ।","signup_title":"ଆପଣଙ୍କ ଖାତା ଖୋଲନ୍ତୁ","signup_sub":"ଶ୍ରମିକ କିମ୍ବା ନିୟୋକ୍ତା ଭାବେ ଯୋଗ ଦିଅନ୍ତୁ।","role_q":"ମୁଁ ଏହି ରୂପରେ ଯୋଗ ଦେଉଛି","role_worker":"ଶ୍ରମିକ","role_worker_d":"ମୋ ନିକଟରେ ଉଚିତ କାମ ଖୋଜନ୍ତୁ","role_contractor":"ନିୟୋକ୍ତା","role_contractor_d":"ସତ୍ୟାପିତ ଶ୍ରମିକ ନିୟୋଜିତ କରନ୍ତୁ","f_name":"ପୂରା ନାମ","f_email":"ଇମେଲ୍","f_phone":"ଫୋନ୍","f_pass":"ପାସୱାର୍ଡ୍","f_city":"ସହର / ସ୍ଥାନ","f_coop":"ମୁଁ ଏକ ସମବାୟ ସମିତିର ସଦସ୍ୟ","f_coopid":"ସଦସ୍ୟତା ଆଇଡି","f_skills":"ଦକ୍ଷତା","f_exp":"ଅଭିଜ୍ଞତା (ବର୍ଷ)","f_wage_exp":"ଆଶାଯୋଗ୍ୟ ମଜୁରି (₹/ଦିନ)","f_avail":"ଉପଲବ୍ଧତା","f_company":"କମ୍ପାନୀ / ବ୍ୟବସାୟର ନାମ","f_services":"ଆପଣ କେଉଁ ସେବା ପାଇଁ ନିୟୋଜନ କରନ୍ତୁ","f_days":"ଅବଧି (ଦିନ)","unit_day":"ପ୍ରତି ଦିନ","unit_job":"ନିର୍ଦ୍ଦିଷ୍ଟ ଭୁଗତାନ","btn_create":"ଖାତା ଖୋଲନ୍ତୁ","btn_login":"ଲଗ୍ ଇନ୍","have_acc":"ପୂର୍ବରୁ ଖାତା ଅଛି? ଲଗ୍ ଇନ୍ କରନ୍ତୁ","new_here":"ନୂଆ? ଖାତା ଖୋଲନ୍ତୁ","demo_title":"ଡେମୋ ଖାତା ଚେଷ୍ଟା କରନ୍ତୁ (ଏକ-କ୍ଲିକ୍ ଲଗ୍ ଇନ୍)","av_full":"ପୂର୍ଣ୍ଣକାଳୀନ","av_part":"ଆଂଶିକାଳୀନ","av_wknd":"ସାପ୍ତାହିକ ଛୁଟି","pending_banner":"⏳ ଆପଣଙ୍କ ପ୍ରୋଫାଇଲ୍ ସମବାୟ ପ୍ରଶାସକଙ୍କ ସତ୍ୟାପନ ଅପେକ୍ଷାରେ ଅଛି। ଏତିକି ବେଳେ ଆପଣ କାମ ଦେଖି ଆବେଦନ କରିପାରିବେ।","tw_jobs":"କାମ ଖୋଜନ୍ତୁ","tw_apps":"ମୋ ଆବେଦନ","tw_offers":"ଅଫର","tw_msgs":"ବାର୍ତ୍ତା","tw_cv":"ମୋ ସିଭି","tw_welfare":"କଲ୍ୟାଣ","tc_workers":"ଶ୍ରମିକ ଦେଖନ୍ତୁ","tc_post":"କାମ ପୋଷ୍ଟ କରନ୍ତୁ","tc_jobs":"ମୋ କାମ","tc_offers":"ପଠାଯାଇଥିବା ଅଫର","tc_msgs":"ବାର୍ତ୍ତା","ta_over":"ଅବଲୋକନ","ta_ver":"ସତ୍ୟାପନ","ta_jobs":"କାମ ନିରୀକ୍ଷଣ","ta_comp":"ଅଭିଯୋଗ","lbl_search":"ଖୋଜନ୍ତୁ…","lbl_skill":"ଦକ୍ଷତା","lbl_city":"ସହର","lbl_wage":"ମଜୁରି","lbl_avail":"ଉପଲବ୍ଧତା","all":"ସମସ୍ତ","wage_any":"ଯେକୌଣସି ମଜୁରି","lbl_veronly":"କେବଳ ସତ୍ୟାପିତ","lbl_jobtitle":"କାମର ଶୀର୍ଷକ","lbl_wage_amt":"ମଜୁରି (₹)","apply":"ଆବେଦନ କରନ୍ତୁ","applied":"ଆବେଦନ ହେଲା ✓","btn_details":"ବିବରଣୀ","per_day":"/ଦିନ","per_job":"/କାମ","posted_by":"ପୋଷ୍ଟ କରିଛନ୍ତି","applicants_lbl":"ଆବେଦକ","btn_hire":"ନିୟୋଜିତ କରନ୍ତୁ","btn_offer":"ଅଫର ପଠାନ୍ତୁ","btn_chat":"ଚାଟ୍","btn_profile":"ପ୍ରୋଫାଇଲ୍ ଦେଖନ୍ତୁ","no_jobs":"ଆପଣଙ୍କ ଫିଲ୍ଟର ସହ କୌଣସି କାମ ମିଳିଲା ନାହିଁ।","no_workers":"ଆପଣଙ୍କ ଫିଲ୍ଟର ସହ କୌଣସି ଶ୍ରମିକ ମିଳିଲେ ନାହିଁ।","status_open":"ଖୋଲା","status_hired":"ନିୟୋଜିତ","status_done":"ସମ୍ପୂର୍ଣ୍ଣ","lbl_duration":"ଅବଧି","days":"ଦିନ","lbl_desc":"ବିବରଣୀ","apply_now":"ଏବେ ଆବେଦନ କରନ୍ତୁ","fair_hint":"ଏହି ଦକ୍ଷତା ପାଇଁ ଉଚିତ ମଜୁରି: ₹{1}–₹{2} ପ୍ରତି ଦିନ","no_apps":"ଆପଣ ଏ ପର୍ଯ୍ୟନ୍ତ କୌଣସି କାମ ପାଇଁ ଆବେଦନ କରିନାହାଁନ୍ତି।","offer_lbl":"ଅଫର","accept":"ଗ୍ରହଣ କରନ୍ତୁ","reject":"ପ୍ରତ୍ୟାଖ୍ୟାନ କରନ୍ତୁ","st_pending":"ବାକି","st_accepted":"ଗୃହୀତ","st_rejected":"ପ୍ରତ୍ୟାଖ୍ୟାତ","no_offers":"ଏ ପର୍ଯ୍ୟନ୍ତ କୌଣସି ଅଫର ନାହିଁ।","offer_msg_ph":"ଛୋଟ ବାର୍ତ୍ତା ଯୋଡ଼ନ୍ତୁ (ଐଚ୍ଛିକ)","offer_job_lbl":"କାମ ବାଛନ୍ତୁ","btn_send_offer":"ଅଫର ପଠାନ୍ତୁ","offer_sent":"ଅଫର ପଠାଗଲା ✓","no_offer_jobs":"କୌଣସି ଖୋଲା କାମ ନାହିଁ। ପ୍ରଥମେ କାମ ପୋଷ୍ଟ କରନ୍ତୁ।","no_coffers":"ଆପଣ ଏ ପର୍ଯ୍ୟନ୍ତ ଅଫର ପଠାଇନାହାଁନ୍ତି। ଶ୍ରମିକ ଦେଖି ଅଫର ପଠାନ୍ତୁ।","job_full":"ପଦବୀ ପୂରଣ ହେଲା","applied_on":"ଆବେଦନ","msg_title":"ବାର୍ତ୍ତା","msg_ph":"ବାର୍ତ୍ତା ଲେଖନ୍ତୁ…","btn_send":"ପଠାନ୍ତୁ","no_threads":"ଏ ପର୍ଯ୍ୟନ୍ତ କୌଣସି କଥୋପକଥନ ନାହିଁ। କାମ, ଅଫର କିମ୍ବା ପ୍ରୋଫାଇଲ୍ରୁ ଆରମ୍ଭ କରନ୍ତୁ।","msg_empty":"କଥୋପକଥନ ବାଛନ୍ତୁ କିମ୍ବା ନୂଆ ଆରମ୍ଭ କରନ୍ତୁ 👋","cv_lbl":"ମୋ ସିଭି","cv_auto":"ଆପଣଙ୍କ ପ୍ରୋଫାଇଲ୍ରୁ ସ୍ୱୟଂଚାଳିତ","btn_print":"🖨️ ପ୍ରିଣ୍ଟ / ପିଡିଏଫ୍","lbl_exp":"ଅଭିଜ୍ଞତା","lbl_reviews":"ସମୀକ୍ଷା","lbl_contact":"ଯୋଗାଯୋଗ","lbl_expected":"ଆଶାଯୋଗ୍ୟ ମଜୁରି","verified_lbl":"ସତ୍ୟାପିତ","pending_lbl":"ସତ୍ୟାପନ ବାକି","yrs":"ବର୍ଷ","new_lbl":"ନୂଆ","primary_role":"ମୁଖ୍ୟ ଦକ୍ଷତା","coop_member":"ସମବାୟ ସଦସ୍ୟ","cv_sum":"ସାରାଂଶ","gen_by":"KaamDwaar ଦ୍ୱାରା ନିର୍ମିତ · ସମବାୟ ସେବା ବଜାର","no_reviews":"ଏ ପର୍ଯ୍ୟନ୍ତ କୌଣସି ସମୀକ୍ଷା ନାହିଁ।","wel_title":"କଲ୍ୟାଣ ଓ ଉଚିତ ମଜୁରି","scheme_t":"ଶ୍ରମିକ କଲ୍ୟାଣ ଯୋଜନା","scheme1_t":"ଦୁର୍ଘଟଣା ବୀମା","scheme1_d":"ସତ୍ୟାପିତ ସଦସ୍ୟଙ୍କ ପାଇଁ ₹2 ଲକ୍ଷ କଭରେଜ୍।","scheme2_t":"ସ୍ୱାସ୍ଥ୍ୟ ଶିବିର","scheme2_d":"ପ୍ରତ୍ୟେକ ଜିଲ୍ଲାରେ ମାଗଣା ମାସିକ ଯାଞ୍ଚ ଶିବିର।","scheme3_t":"ଦକ୍ଷତା ପ୍ରଶିକ୍ଷଣ","scheme3_d":"ମାଗଣା କର୍ମଶାଳା ଓ ପ୍ରମାଣପତ୍ର ସହାୟତା।","scheme4_t":"ପେନସନ୍ ଓ ସଞ୍ଚୟ","scheme4_d":"ସମବାୟ ଅଂଶଦାନ ସହ ମାସିକ ସଞ୍ଚୟ।","report_t":"ସମସ୍ୟା ରିପୋର୍ଟ କରନ୍ତୁ","rt_payment":"ଭୁଗତାନ ଜନିତ","rt_workplace":"କାର୍ଯ୍ୟସ୍ଥଳ ଜନିତ","rt_other":"ଅନ୍ୟ","f_against":"କାହା ବିରୁଦ୍ଧରେ (ବ୍ୟକ୍ତି / କମ୍ପାନୀ / କାମ)","f_report_d":"କ'ଣ ହେଲା?","btn_report":"ରିପୋର୍ଟ ପଠାନ୍ତୁ","my_reports":"ମୋ ରିପୋର୍ଟ","st_open":"ଖୋଲା","st_resolved":"ସମାଧାନ ହେଲା","report_toast":"ରିପୋର୍ଟ ପଠାଗଲା। ସମବାୟ ପ୍ରଶାସକ ଯୋଗାଯୋଗ କରିବେ।","no_reports":"ଆପଣଙ୍କର କୌଣସି ରିପୋର୍ଟ ନାହିଁ।","rate_title":"ଆପଣଙ୍କ ଅଭିଜ୍ଞତା ରେଟ୍ କରନ୍ତୁ","f_comment":"ବିବରଣୀ ଦିଅନ୍ତୁ (ଐଚ୍ଛିକ)","btn_rate":"ରେଟିଂ ପଠାନ୍ତୁ","rate_toast":"ରେଟିଂ ପାଇଁ ଧନ୍ୟବାଦ ⭐","rate_worker":"ଶ୍ରମିକଙ୍କୁ ରେଟ୍ କରନ୍ତୁ","rate_contractor":"ନିୟୋକ୍ତାଙ୍କୁ ରେଟ୍ କରନ୍ତୁ","pay_title":"କାମ ସମ୍ପୂର୍ଣ୍ଣ କରନ୍ତୁ ଓ ଭୁଗତାନ କରନ୍ତୁ","f_amount":"ରାଶି (₹)","btn_pay":"ଭୁଗତାନ ନିଶ୍ଚିତ କରନ୍ତୁ","pay_toast":"ଭୁଗତାନ ଦର୍ଜ, କାମ ସମ୍ପୂର୍ଣ୍ଣ ✓","btn_complete":"ସମ୍ପୂର୍ଣ୍ଣ ଓ ଭୁଗତାନ","paid_lbl":"ଭୁଗତାନ ହେଲା","ad_pending_t":"ବାକି ସତ୍ୟାପନ","btn_verify":"ସତ୍ୟାପନ କରନ୍ତୁ","ad_none":"କୌଣସି ବାକି ସତ୍ୟାପନ ନାହିଁ — ସବୁ ସମ୍ପୂର୍ଣ୍ଣ 🎉","ad_over":"ସମବାୟ ଅବଲୋକନ","s_workers":"ଶ୍ରମିକ","s_verified":"ସତ୍ୟାପିତ","s_pending":"ବାକି","s_contractors":"ନିୟୋକ୍ତା","s_activejobs":"ଚାଲୁ କାମ","s_donejobs":"ସମ୍ପୂର୍ଣ୍ଣ କାମ","s_complaints":"ଖୋଲା ଅଭିଯୋଗ","s_jobs":"ମୋଟ କାମ","ad_jobs_t":"ସମସ୍ତ କାମ ନିରୀକ୍ଷଣ","below_fair":"⚠ ଉଚିତ ମଜୁରିଠାରୁ କମ୍","fair_ok":"ଉଚିତ ✓","ad_comp_t":"ଅଭିଯୋଗ ଓ ରିପୋର୍ଟ","btn_resolve":"ସମାଧାନ ହେଲା","ad_nocomp":"କୌଣସି ଅଭିଯୋଗ ନାହିଁ। ସବୁ ଖୁସି 🎉","reported_by":"ରିପୋର୍ଟ କଲେ","no_desc":"କୌଣସି ବିବରଣୀ ନାହିଁ।","toast_welcome":"ସ୍ୱାଗତ, {1} 👋","toast_logout":"ଲଗ୍ ଆଉଟ୍ ହେଲା","toast_applied":"ଆବେଦନ ପଠାଗଲା ✓","toast_offeracc":"ଅଫର ଗୃହୀତ — ନିୟୋଜନ ହେଲା! 🎉","toast_offerrej":"ଅଫର ପ୍ରତ୍ୟାଖ୍ୟାତ","toast_hired":"ଶ୍ରମିକ ନିୟୋଜିତ 🎉","toast_verified":"ଶ୍ରମିକ ସତ୍ୟାପିତ ✓","toast_resolved":"ଅଭିଯୋଗ ସମାଧାନ ହେଲା ✓","toast_jobposted":"କାମ ପୋଷ୍ଟ ହେଲା ✓","toast_rating":"ରେଟିଂ ପଠାଗଲା ⭐","err_login":"ଇମେଲ୍ କିମ୍ବା ପାସୱାର୍ଡ୍ ଭୁଲ୍","err_fields":"ସମସ୍ତ ଆବଶ୍ୟକ ଘର ପୂରଣ କରନ୍ତୁ","err_skill":"ଅନ୍ତତଃ ଗୋଟିଏ ଦକ୍ଷତା ବାଛନ୍ତୁ","err_dup":"ଏହି ଇମେଲ୍‌ରେ ପୂର୍ବରୁ ଖାତା ଅଛି","member_since":"ସଦସ୍ୟ","chat_with":"ଚାଟ୍ କରନ୍ତୁ"}}
+</script>
+<script>
+"use strict";
+/* ================================================================
+   KaamDwaar — Cooperative-owned digital service marketplace (MVP)
+   Website-only single-file build · JSON data packages embedded · data persisted in localStorage (browser)
+================================================================ */
+
+/* ---------------- Constants ---------------- */
+
+
+
+
+/* ---------------- i18n ---------------- */
+/* ---------------- JSON data packages (embedded in this file as
+   <script type="application/json"> blocks just above this script) ---------------- */
+const PKG_DATA=JSON.parse(document.getElementById("pkg-data").textContent);
+const PKG_I18N=JSON.parse(document.getElementById("pkg-i18n").textContent);
+const SKILLS=PKG_DATA.skills, CITIES=PKG_DATA.cities, FAIR=PKG_DATA.fair;
+const L=PKG_I18N;
+
+/* ---------------- State & helpers ---------------- */
+const $=s=>document.querySelector(s);
+const state={view:"home",tab:null,jf:{q:"",skill:"",city:"",wage:"0"},wf:{q:"",skill:"",city:"",avail:"",ver:true},
+  chatWith:null,signupRole:"worker",stars:5,rate:null,payJob:null};
+let lang=localStorage.getItem("ss_lang")||"en";
+let theme=localStorage.getItem("ss_theme")||"light";
+
+function t(k){
+  let s=(L[lang]&&L[lang][k])||L.en[k]||k;
+  for(let i=1;i<arguments.length;i++) s=s.replace("{"+i+"}",arguments[i]);
+  return s;
+}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function uid(){return "x"+Date.now().toString(36)+Math.floor(Math.random()*1e5).toString(36);}
+function ts(daysAgo){return Date.now()+daysAgo*864e5;}
+function money(n){return "₹"+Number(n).toLocaleString("en-IN");}
+function timeAgo(ts){const d=Date.now()-ts,m=Math.floor(d/6e4);
+  if(m<1)return "now"; if(m<60)return m+"m"; const h=Math.floor(m/60);
+  if(h<24)return h+"h"; return Math.floor(h/24)+"d";}
+function initials(n){return String(n).split(/\s+/).slice(0,2).map(w=>w[0]||"").join("").toUpperCase();}
+const PAL=["#0f6b4e","#b45309","#7c3aed","#0e7490","#be123c","#4d7c0f","#a21caf","#b91c1c"];
+function avatarHtml(u,cls){const c=PAL[[...String(u.id)].reduce((a,ch)=>a+ch.charCodeAt(0),0)%PAL.length];
+  return '<div class="avatar '+(cls||"")+'" style="background:'+c+'">'+esc(initials(u.name))+"</div>";}
+function avKey(a){return a==="full"?t("av_full"):a==="part"?t("av_part"):t("av_wknd");}
+
+/* ---------------- Database ---------------- */
+const DBKEY="kaamdwaar_db_v1";
+let db=null;
+function seedDB(){
+  const users=[
+    {id:"u-admin",role:"admin",name:"Cooperative Admin",org:"Kalinga Shram Cooperative",email:"admin@coop.in",password:"admin123",city:"Bhubaneswar",ts:ts(-400)},
+    {id:"u-ramesh",role:"worker",name:"Ramesh Behera",email:"ramesh@worker.in",password:"1234",phone:"+91 98450 12345",city:"Bhubaneswar",skills:["Electrician"],exp:8,wage:700,avail:"full",coop:true,coopId:"KSC-1042",verified:true,ts:ts(-320)},
+    {id:"u-sunita",role:"worker",name:"Sunita Nayak",email:"sunita@worker.in",password:"1234",phone:"+91 94370 22881",city:"Cuttack",skills:["Tailor"],exp:12,wage:500,avail:"part",coop:true,coopId:"KSC-0778",verified:true,ts:ts(-500)},
+    {id:"u-lakshmi",role:"worker",name:"Lakshmi Pradhan",email:"lakshmi@worker.in",password:"1234",phone:"+91 78945 61230",city:"Puri",skills:["Farm Worker","Loader / Helper"],exp:10,wage:450,avail:"full",coop:true,coopId:"KSC-2210",verified:true,ts:ts(-410)},
+    {id:"u-manoj",role:"worker",name:"Manoj Kumar Sahu",email:"manoj@worker.in",password:"1234",phone:"+91 99371 45678",city:"Rourkela",skills:["Mason","Carpenter"],exp:15,wage:700,avail:"full",coop:true,coopId:"KSC-0930",verified:true,ts:ts(-600)},
+    {id:"u-sasmita",role:"worker",name:"Sasmita Das",email:"sasmita@worker.in",password:"1234",phone:"+91 88959 33221",city:"Berhampur",skills:["Cook / Catering"],exp:9,wage:550,avail:"weekend",coop:false,coopId:"",verified:true,ts:ts(-260)},
+    {id:"u-debashish",role:"worker",name:"Debashish Mohanty",email:"debashish@worker.in",password:"1234",phone:"+91 70084 55112",city:"Bhubaneswar",skills:["Plumber"],exp:5,wage:650,avail:"part",coop:true,coopId:"KSC-3121",verified:false,ts:ts(-3)},
+    {id:"u-priya",role:"contractor",name:"Priya Pattnaik",company:"Pattnaik Constructions",email:"priya@builder.in",password:"1234",phone:"+91 90782 11443",city:"Bhubaneswar",services:["Electrician","Plumber","Mason","Painter"],ts:ts(-350)},
+    {id:"u-utkal",role:"contractor",name:"Sanjay Rout",company:"Utkal Infra & Farms",email:"sanjay@utkal.in",password:"1234",phone:"+91 94371 88990",city:"Cuttack",services:["Mason","Farm Worker","Loader / Helper","Painter"],ts:ts(-300)}
+  ];
+  const jobs=[
+    {id:"j0",cid:"u-priya",title:"Catering for office inauguration",skill:"Cook / Catering",city:"Bhubaneswar",desc:"Prepare lunch for 60 guests at our new office opening. Ingredients provided.",wage:550,unit:"day",days:2,status:"completed",hired:"u-sasmita",created:ts(-30)},
+    {id:"j1",cid:"u-priya",title:"House wiring for new 2BHK flat",skill:"Electrician",city:"Bhubaneswar",desc:"Complete electrical wiring for a new 2BHK flat including switchboard fitting. Materials provided on site.",wage:750,unit:"day",days:5,status:"open",hired:null,created:ts(-2)},
+    {id:"j2",cid:"u-priya",title:"Plumbing repair at office",skill:"Plumber",city:"Bhubaneswar",desc:"Fix two leaking taps and replace a wash-basin pipe in the office pantry.",wage:650,unit:"day",days:2,status:"open",hired:null,created:ts(-1)},
+    {id:"j3",cid:"u-utkal",title:"Boundary wall construction",skill:"Mason",city:"Rourkela",desc:"Build a 40 ft boundary wall for a warehouse. Cement and bricks supplied.",wage:700,unit:"day",days:12,status:"open",hired:null,created:ts(-3)},
+    {id:"j4",cid:"u-utkal",title:"Paddy harvest helpers needed",skill:"Farm Worker",city:"Puri",desc:"Seasonal paddy harvesting on a 6 acre plot. Tools provided, lunch included.",wage:450,unit:"day",days:7,status:"open",hired:null,created:ts(-2)},
+    {id:"j5",cid:"u-priya",title:"School uniform stitching (40 pcs)",skill:"Tailor",city:"Cuttack",desc:"Stitch 40 school uniforms (shirt + shorts). Fabric cut and ready.",wage:480,unit:"day",days:10,status:"open",hired:null,created:ts(-4)},
+    {id:"j6",cid:"u-utkal",title:"Kitchen & staircase painting",skill:"Painter",city:"Cuttack",desc:"Interior painting of kitchen and staircase. Paint and brushes provided.",wage:600,unit:"day",days:3,status:"open",hired:null,created:ts(-1)}
+  ];
+  const apps=[{id:"a1",jobId:"j1",workerId:"u-ramesh",ts:ts(-1)}];
+  const offers=[
+    {id:"o1",jobId:"j2",cid:"u-priya",workerId:"u-ramesh",msg:"Hi Ramesh, we need a certified electrician who also handles plumbing for a quick office repair. Can you start this week?",status:"pending",ts:ts(-0.5)},
+    {id:"o2",jobId:"j5",cid:"u-priya",workerId:"u-sunita",msg:"40 uniforms, fabric is ready. Fair daily wage offered.",status:"accepted",ts:ts(-3)}
+  ];
+  const messages=[
+    {id:"m1",from:"u-priya",to:"u-ramesh",text:"Hi Ramesh, please apply for the wiring job — materials will be on site from Monday.",ts:ts(-1)},
+    {id:"m2",from:"u-ramesh",to:"u-priya",text:"Thank you! I have applied. I can start Monday morning.",ts:ts(-0.9)}
+  ];
+  const reviews=[
+    {id:"r1",jobId:"j0",from:"u-priya",to:"u-sasmita",stars:5,text:"Excellent food and very professional service. Guests loved it!",ts:ts(-28)},
+    {id:"r2",jobId:"j0",from:"u-sasmita",to:"u-priya",stars:5,text:"Payment was made on time. Very respectful employer.",ts:ts(-28)},
+    {id:"r3",jobId:"old1",from:"u-priya",to:"u-ramesh",stars:5,text:"Skilled and punctual. Completed the wiring ahead of schedule.",ts:ts(-60)},
+    {id:"r4",jobId:"old2",from:"u-utkal",to:"u-ramesh",stars:4,text:"Good work overall. Would hire again.",ts:ts(-90)},
+    {id:"r5",jobId:"old3",from:"u-priya",to:"u-manoj",stars:5,text:"Excellent masonry work on our last project.",ts:ts(-120)}
+  ];
+  const payments=[{id:"p1",jobId:"j0",amount:1100,ts:ts(-28)}];
+  const reports=[{id:"rp1",uid:"u-lakshmi",type:"payment",against:"Utkal Infra & Farms — harvest job",details:"Payment for last week's harvest work is still pending. Please help resolve.",status:"open",ts:ts(-2)}];
+  return {users,jobs,apps,offers,messages,reviews,payments,reports};
+}
+function loadDB(){try{const raw=localStorage.getItem(DBKEY);db=raw?JSON.parse(raw):seedDB();}catch(e){db=seedDB();}saveDB();}
+function saveDB(){localStorage.setItem(DBKEY,JSON.stringify(db));}
+function getUser(id){return db.users.find(u=>u.id===id);}
+function getJob(id){return db.jobs.find(j=>j.id===id);}
+function me(){const id=localStorage.getItem("ss_session");return id?getUser(id):null;}
+function setSession(id){id?localStorage.setItem("ss_session",id):localStorage.removeItem("ss_session");}
+
+/* ---------------- Ratings & reviews ---------------- */
+function reviewsFor(uid){return db.reviews.filter(r=>r.to===uid).sort((a,b)=>b.ts-a.ts);}
+function ratingOf(uid){const rs=db.reviews.filter(r=>r.to===uid);if(!rs.length)return null;
+  return (rs.reduce((a,r)=>a+r.stars,0)/rs.length);}
+function starsHtml(uid){const r=ratingOf(uid);if(r==null)return '<span class="stars small">'+t("new_lbl")+"</span>";
+  return '<span class="stars">★ <b>'+r.toFixed(1)+"</b> <span class='muted small'>("+db.reviews.filter(x=>x.to===uid).length+")</span></span>";}
+function hasReviewed(jobId,from){return db.reviews.some(r=>r.jobId===jobId&&r.from===from);}
+function fairFlag(j){if(j.unit!=="day"||!FAIR[j.skill])return "";const f=FAIR[j.skill];
+  return j.wage<f[0]?'<span class="st st-warn">'+t("below_fair")+"</span>":'<span class="st st-ok">'+t("fair_ok")+"</span>";}
+
+/* ---------------- Toast & Modal ---------------- */
+function toast(msg){const el=document.createElement("div");el.className="toast";el.innerHTML=msg;
+  $("#toast-root").appendChild(el);setTimeout(()=>el.remove(),3200);}
+function openModal(html){$("#modal-root").innerHTML='<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">'+html+"</div></div>";}
+function closeModal(){$("#modal-root").innerHTML="";}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+
+/* ---------------- Theme & language ---------------- */
+function applyTheme(){document.documentElement.setAttribute("data-theme",theme);}
+function toggleTheme(){theme=theme==="light"?"dark":"light";localStorage.setItem("ss_theme",theme);applyTheme();render();}
+function setLang(l){lang=l;localStorage.setItem("ss_lang",l);document.documentElement.lang=l==="or"?"or":l;render();}
+function themeIcon(){return theme==="light"
+ ?'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>'
+ :'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>';}
+function logoSvg(size){
+  const h=size||92,w=Math.round(h*5.55);
+  return '<svg class="brand-logo" width="'+w+'" height="'+h+'" viewBox="70 70 1360 390" role="img" aria-label="KaamDwaar logo" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs><linearGradient id="kdg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#0F766E"/><stop offset="1" stop-color="#22C55E"/></linearGradient><filter id="kds" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0F172A" flood-opacity=".14"/></filter></defs>'
+    +'<g transform="translate(95 95) scale(.78)" filter="url(#kds)"><rect width="330" height="330" rx="78" fill="#ECFDF5"/><path d="M86 273V150C86 83 128 48 165 48s79 35 79 102v123" fill="none" stroke="url(#kdg)" stroke-width="34" stroke-linecap="round"/><path d="M121 273V162c0-38 23-60 44-60s44 22 44 60v111" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="8"/><path d="M165 163c-18 51-38 86-65 110h130c-27-24-47-59-65-110z" fill="#D1FAE5"/><rect x="106" y="210" width="118" height="76" rx="18" fill="#0F766E"/><path d="M140 210v-17c0-16 13-29 29-29h-8c16 0 29 13 29 29v17" fill="none" stroke="#0F766E" stroke-width="17" stroke-linecap="round"/><rect x="154" y="210" width="23" height="76" rx="7" fill="#22C55E"/><circle cx="165" cy="248" r="9" fill="#FFFFFF"/></g>'
+    +'<text x="385" y="195" font-family="Arial,Helvetica,sans-serif" font-size="118" font-weight="900" letter-spacing="-2.5" fill="#0F172A">Kaam<tspan fill="#0F766E">Dwaar</tspan></text>'
+    +'<text x="392" y="270" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="900" fill="#0F766E">Gateway to fair work</text>'
+    +'<text x="392" y="342" font-family="Arial,Helvetica,sans-serif" font-size="40" font-weight="900" fill="#475569">Trusted workers · Verified jobs · Cooperative support</text>'
+    +'</svg>';
+}
+
+/* ---------------- Navigation ---------------- */
+function go(view,opts){opts=opts||{};state.view=view;
+  if(view==="signup")state.signupRole=opts.role||state.signupRole||"worker";
+  state.tab=null;state.chatWith=null;render();window.scrollTo({top:0});}
+function ctaFindWork(){const u=me();if(u&&u.role==="worker"){go("dash");}else go("signup",{role:"worker"});}
+function ctaHire(){const u=me();if(u&&u.role==="contractor"){go("dash");}else go("signup",{role:"contractor"});}
+
+/* ---------------- Header ---------------- */
+function renderHeader(){const u=me();
+  const langSel='<select class="lang-sel" onchange="setLang(this.value)" title="Language">'
+    +'<option value="en"'+(lang==="en"?" selected":"")+'>EN</option>'
+    +'<option value="hi"'+(lang==="hi"?" selected":"")+'>हिं</option>'
+    +'<option value="or"'+(lang==="or"?" selected":"")+'>ଓଡ଼ି</option></select>';
+  let right="";
+  if(u){
+    const roleTag=u.role==="worker"?t("role_worker"):u.role==="contractor"?t("role_contractor"):"Admin";
+    right='<a class="user-chip">'+avatarHtml(u,"sm")+'<span class="uc-txt">'+esc(u.name)+'<span class="role-tag">'+roleTag+"</span></span></a>"
+      +'<a class="btn btn-o btn-sm" onclick="go(\'dash\')">'+t("nav_dash")+"</a>"
+      +'<a class="btn btn-g btn-sm" onclick="logout()">'+t("nav_logout")+"</a>";
+  }else{
+    right='<a class="btn btn-g btn-sm" onclick="go(\'login\')">'+t("nav_login")+"</a>"
+      +'<a class="btn btn-p btn-sm" onclick="go(\'signup\')">'+t("nav_signup")+"</a>";
+  }
+  $("#topbar").innerHTML='<div class="container">'
+    +'<a class="brand" onclick="go(\'home\')">'+logoSvg(92)+'</a>'
+    +'<div class="nav-actions">'+langSel+'<button class="icon-btn" onclick="toggleTheme()" title="Theme">'+themeIcon()+"</button>"+right+"</div></div>";
+  $("#foot-tag").textContent="“"+t("hero_t1")+" "+t("hero_t2")+" "+t("hero_t3")+"”";
+  $("#foot-note").textContent=t("foot_note");
+}
+
+/* ================================================================
+   HOME VIEW
+================================================================ */
+function vHome(){const u=me();
+  const workers=db.users.filter(x=>x.role==="worker"),verified=workers.filter(w=>w.verified).length;
+  const cons=db.users.filter(x=>x.role==="contractor").length;
+  const openJ=db.jobs.filter(j=>j.status==="open").length,doneJ=db.jobs.filter(j=>j.status==="completed").length;
+  const steps=[t("how_s1"),t("how_s2"),t("how_s3"),t("how_s4"),t("how_s5"),t("how_s6"),t("how_s7"),t("how_s8")];
+  const feats=[["🛡️",t("feat1_t"),t("feat1_d")],["🗺️",t("feat2_t"),t("feat2_d")],["💬",t("feat3_t"),t("feat3_d")],["⚖️",t("feat4_t"),t("feat4_d")],["⭐",t("feat5_t"),t("feat5_d")],["🤝",t("feat6_t"),t("feat6_d")]];
+  const fairRows=Object.entries(FAIR).slice(0,8).map(([s,r])=>'<tr><td><b>'+s+'</b></td><td>₹'+r[0]+" – ₹"+r[1]+"</td></tr>").join("");
+  return `
+  <section class="hero"><div class="container">
+    <div class="hero-txt">
+      <span class="kicker">🤝 ${t("hero_kicker")}</span>
+      <h1>${t("hero_t1")}<br><span class="c-p">${t("hero_t2")}</span><br><span class="c-a">${t("hero_t3")}</span></h1>
+      <p class="hero-sub">${t("hero_sub")}</p>
+      <div class="hero-cta">
+        <button class="btn btn-p btn-lg" onclick="ctaFindWork()">🔨 ${t("cta_findwork")}</button>
+        <button class="btn btn-ac btn-lg" onclick="ctaHire()">🏗️ ${t("cta_hire")}</button>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="mock mock-worker">
+        <div class="row"><div class="avatar">KD</div><div style="flex:1"><b style="font-size:14px">KaamDwaar Trust Profile</b><div class="small muted">Verified worker · Skill badge · City match</div></div></div>
+        <div class="row mt"><span class="vbadge">✓ ${t("verified_lbl")}</span><span class="stars">★ <b>4.8</b></span></div>
+        <div class="chiprow mt"><span class="chip p">⚡ Skilled Labour</span><span class="chip">⚖️ Fair wage guide</span></div>
+      </div>
+      <div class="mock mock-job">
+        <div class="sp-between"><b style="font-size:14px">Employer posts a fair job</b><span class="st st-open">${t("status_open")}</span></div>
+        <div class="chiprow mt"><span class="chip p">Labour</span><span class="chip">📍 Odisha</span><span class="chip a">₹400–₹550${t("per_day")}</span></div>
+        <div class="small muted mt">Cooperative verification + fair wage warning + direct chat</div>
+      </div>
+      <div class="float-chip">⚖️ Fair Wage ✓</div>
+    </div>
+  </div></section>
+
+  <section class="container">
+    <div class="stats">
+      <div class="stat card"><b>${verified}</b><span>${t("stat_workers")}</span></div>
+      <div class="stat card"><b>${cons}</b><span>${t("stat_contractors")}</span></div>
+      <div class="stat card"><b>${openJ}</b><span>${t("stat_openjobs")}</span></div>
+      <div class="stat card"><b>${doneJ}</b><span>${t("stat_completed")}</span></div>
+    </div>
+  </section>
+
+  <section class="sec"><div class="container">
+    <div class="sec-hd"><h2>${t("how_title")}</h2><p>${t("how_sub")}</p></div>
+    <div class="steps">${steps.map((s,i)=>'<span class="step"><span class="step-n">'+(i+1)+"</span>"+s+"</span>"+(i<steps.length-1?'<span class="step-arrow">→</span>':"")).join("")}</div>
+  </div></section>
+
+  <section class="sec" style="padding-top:10px"><div class="container">
+    <div class="sec-hd"><h2>${t("feat_title")}</h2><p>${t("feat_sub")}</p></div>
+    <div class="feat-grid">${feats.map(f=>'<div class="feat card"><div class="feat-ic">'+f[0]+"</div><b>"+f[1]+"</b><p>"+f[2]+"</p></div>").join("")}</div>
+  </div></section>
+
+  <section class="sec" style="padding-top:10px"><div class="container" style="max-width:760px">
+    <div class="sec-hd"><h2>⚖️ ${t("fair_title")}</h2><p>${t("fair_note")}</p></div>
+    <div class="card" style="overflow:hidden"><table class="tbl">
+      <tr><th>${t("fair_skill")}</th><th>${t("fair_range")}</th></tr>${fairRows}</table></div>
+  </div></section>
+
+  <section class="sec"><div class="container">
+    <div class="card cta-band">
+      <h2 style="font-size:24px">${t("cta_title")}</h2>
+      <p class="muted mt">${t("cta_sub")}</p>
+      <div class="hero-cta mt-lg" style="justify-content:center">
+        <button class="btn btn-p btn-lg" onclick="go('signup',{role:'worker'})">${t("nav_signup")} → ${t("role_worker")}</button>
+        <button class="btn btn-ac btn-lg" onclick="go('signup',{role:'contractor'})">${t("nav_signup")} → ${t("role_contractor")}</button>
+      </div>
+    </div>
+  </div></section>`;
+}
+
+/* ================================================================
+   AUTH VIEWS
+================================================================ */
+function vLogin(){
+  const demos=[["u-ramesh","👷 "+t("role_worker")],["u-priya","🏗️ "+t("role_contractor")],["u-admin","🏛️ Admin"]];
+  return `<div class="auth-wrap"><div class="card auth-card">
+    <h2>${t("login_title")}</h2><p class="muted small mb">${t("login_sub")}</p>
+    <form onsubmit="return handleLogin(event)">
+      <div class="field"><label>${t("f_email")}</label><input class="input" id="li-email" type="email" required placeholder="ramesh@worker.in"></div>
+      <div class="field"><label>${t("f_pass")}</label><input class="input" id="li-pass" type="password" required placeholder="••••"></div>
+      <button class="btn btn-p" style="width:100%" type="submit">${t("btn_login")} →</button>
+    </form>
+    <p class="small mt" style="text-align:center"><a onclick="go('signup')" style="color:var(--primary);font-weight:700">${t("new_here")}</a></p>
+    <hr style="border:none;border-top:1px solid var(--border);margin:18px 0">
+    <div class="small" style="text-align:center;font-weight:700">${t("demo_title")}</div>
+    <div class="demo-grid">${demos.map(d=>{const u=getUser(d[0]);return '<div class="demo-card"><b>'+d[1]+"</b>"+esc(u.name)+'<span class="muted">'+esc(u.email)+" · "+esc(u.password)+'</span><button class="btn btn-p btn-sm" onclick="demoLogin(\''+u.email+'\')">'+t("btn_login")+" →</button></div>";}).join("")}</div>
+  </div></div>`;
+}
+function handleLogin(e){e.preventDefault();
+  const email=$("#li-email").value.trim().toLowerCase(),pass=$("#li-pass").value;
+  const u=db.users.find(x=>x.email.toLowerCase()===email&&x.password===pass);
+  if(!u){toast("⚠️ "+t("err_login"));return false;}
+  setSession(u.id);toast(t("toast_welcome",esc(u.name.split(" ")[0])));go("dash");return false;}
+function demoLogin(email){const u=db.users.find(x=>x.email===email);if(!u)return;
+  setSession(u.id);toast(t("toast_welcome",esc(u.name.split(" ")[0])));go("dash");}
+function logout(){setSession(null);toast(t("toast_logout"));go("home");}
+
+function pickRole(r){state.signupRole=r;render();}
+function vSignup(){const r=state.signupRole;
+  const skillChips=SKILLS.map(s=>'<label class="chk"><input type="checkbox" name="skill" value="'+esc(s)+'"><span>'+esc(s)+"</span></label>").join("");
+  const cityOpts=CITIES.map(c=>'<option value="'+c+'">'+c+"</option>").join("");
+  return `<div class="auth-wrap" style="max-width:640px"><div class="card auth-card">
+    <h2>${t("signup_title")}</h2><p class="muted small mb">${t("signup_sub")}</p>
+    <form onsubmit="return handleSignup(event)">
+      <div class="field"><label>${t("role_q")}</label>
+        <div class="role-grid">
+          <div class="role-card ${r==="worker"?"sel":""}" onclick="pickRole('worker')"><div class="rc-ic">👷</div><b>${t("role_worker")}</b><span>${t("role_worker_d")}</span></div>
+          <div class="role-card ${r==="contractor"?"sel":""}" onclick="pickRole('contractor')"><div class="rc-ic">🏗️</div><b>${t("role_contractor")}</b><span>${t("role_contractor_d")}</span></div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>${t("f_name")} *</label><input class="input" id="su-name" required></div>
+        <div class="field"><label>${t("f_phone")}</label><input class="input" id="su-phone" placeholder="+91"></div>
+        <div class="field"><label>${t("f_email")} *</label><input class="input" id="su-email" type="email" required></div>
+        <div class="field"><label>${t("f_pass")} *</label><input class="input" id="su-pass" type="password" required minlength="4"></div>
+        <div class="field full"><label>${t("f_city")} *</label><input class="input" id="su-city" list="citylist" required placeholder="Bhubaneswar"><datalist id="citylist">${cityOpts}</datalist></div>
+      </div>
+      <div id="sec-worker" style="display:${r==="worker"?"block":"none"}">
+        <div class="field"><label>${t("f_skills")} *</label><div class="chip-sel">${skillChips}</div></div>
+        <div class="form-grid">
+          <div class="field"><label>${t("f_exp")}</label><input class="input" id="su-exp" type="number" min="0" max="60" value="1"></div>
+          <div class="field"><label>${t("f_wage_exp")}</label><input class="input" id="su-wage" type="number" min="100" value="500"></div>
+          <div class="field"><label>${t("f_avail")}</label><select class="input" id="su-avail"><option value="full">${t("av_full")}</option><option value="part">${t("av_part")}</option><option value="weekend">${t("av_wknd")}</option></select></div>
+        </div>
+      </div>
+      <div id="sec-contractor" style="display:${r==="contractor"?"block":"none"}">
+        <div class="field"><label>${t("f_company")} *</label><input class="input" id="su-company"></div>
+        <div class="field"><label>${t("f_services")}</label><div class="chip-sel">${SKILLS.map(s=>'<label class="chk"><input type="checkbox" name="service" value="'+esc(s)+'"><span>'+esc(s)+"</span></label>").join("")}</div></div>
+      </div>
+      <button class="btn btn-p btn-lg" style="width:100%" type="submit">${t("btn_create")} →</button>
+    </form>
+    <p class="small mt" style="text-align:center"><a onclick="go('login')" style="color:var(--primary);font-weight:700">${t("have_acc")}</a></p>
+  </div></div>`;
+}
+function handleSignup(e){e.preventDefault();
+  const g=id=>{const el=document.getElementById(id);return el?el.value.trim():"";};
+  const name=g("su-name"),email=g("su-email").toLowerCase(),pass=g("su-pass"),city=g("su-city");
+  if(!name||!email||!pass||!city){toast("⚠️ "+t("err_fields"));return false;}
+  if(db.users.some(u=>u.email.toLowerCase()===email)){toast("⚠️ "+t("err_dup"));return false;}
+  const role=state.signupRole,u={id:uid(),role,name,email,password:pass,phone:g("su-phone"),city,ts:Date.now()};
+  if(role==="worker"){
+    u.skills=[...document.querySelectorAll('input[name="skill"]:checked')].map(i=>i.value);
+    if(!u.skills.length){toast("⚠️ "+t("err_skill"));return false;}
+    u.exp=+g("su-exp")||0;u.wage=+g("su-wage")||400;
+    u.avail=$("#su-avail")?$("#su-avail").value:"full";
+    u.coop=false;u.coopId="";u.verified=false;
+  }else{
+    u.company=g("su-company")||name;
+    u.services=[...document.querySelectorAll('input[name="service"]:checked')].map(i=>i.value);
+  }
+  db.users.push(u);saveDB();setSession(u.id);
+  toast(t("toast_welcome",esc(name.split(" ")[0])));go("dash");return false;}
+
+/* ================================================================
+   DASHBOARD
+================================================================ */
+function setTab(tab){state.tab=tab;state.chatWith=null;render();}
+function vDash(u){
+  if(!u){go("home");return "";}
+  let tabs,content;
+  if(u.role==="worker"){
+    const defs=[["jobs",t("tw_jobs")],["apps",t("tw_apps")],["offers",t("tw_offers"),db.offers.filter(o=>o.workerId===u.id&&o.status==="pending").length],["msgs",t("tw_msgs")],["cv",t("tw_cv")],["welfare",t("tw_welfare")]];
+    if(!defs.some(d=>d[0]===state.tab))state.tab="jobs";
+    tabs=tabbar(defs);content=wTab(u);
+  }else if(u.role==="contractor"){
+    const defs=[["workers",t("tc_workers")],["post",t("tc_post")],["jobs",t("tc_jobs")],["coffers",t("tc_offers")],["msgs",t("tc_msgs")]];
+    if(!defs.some(d=>d[0]===state.tab))state.tab="workers";
+    tabs=tabbar(defs);content=cTab(u);
+  }else{
+    const defs=[["over",t("ta_over")],["ver",t("ta_ver"),db.users.filter(x=>x.role==="worker"&&!x.verified).length],["jobs",t("ta_jobs")],["comp",t("ta_comp"),db.reports.filter(r=>r.status==="open").length]];
+    if(!defs.some(d=>d[0]===state.tab))state.tab="over";
+    tabs=tabbar(defs);content=aTab(u);
+  }
+  return '<div class="container dash">'+dhead(u)+((u.role==="worker"&&!u.verified)?'<div class="banner">'+t("pending_banner")+"</div>":"")+tabs+content+"</div>";
+}
+function tabbar(defs){return '<div class="tabs">'+defs.map(d=>'<button class="tab '+(state.tab===d[0]?"active":"")+'" onclick="setTab(\''+d[0]+'\')">'+d[1]+(d[2]?'<span class="tcount">'+d[2]+"</span>":"")+"</button>").join("")+"</div>";}
+function dhead(u){
+  if(u.role==="worker"){
+    return '<div class="card dhead">'+avatarHtml(u,"lg")+'<div style="flex:1;min-width:220px"><h2>'+esc(u.name)+" "+(u.verified?'<span class="vbadge">✓ '+t("verified_lbl")+"</span>":'<span class="pbadge">⏳ '+t("pending_lbl")+"</span>")
+      +'</h2><div class="sub">'+esc(u.skills.join(" · "))+" · 📍 "+esc(u.city)+'</div><div class="row mt">'+starsHtml(u.id)
+      +'<span class="chip">💼 '+u.exp+" "+t("yrs")+'</span><span class="chip a">'+money(u.wage)+t("per_day")+'</span><span class="chip">🕐 '+avKey(u.avail)+"</span>"
+      +(u.coop&&u.coopId?'<span class="chip p">🤝 '+esc(u.coopId)+"</span>":"")+"</div></div></div>";
+  }else if(u.role==="contractor"){
+    return '<div class="card dhead">'+avatarHtml(u,"lg")+'<div style="flex:1;min-width:220px"><h2>'+esc(u.company||u.name)+' <span class="vbadge">🏗️ '+t("role_contractor")+'</span></h2><div class="sub">'
+      +esc(u.name)+" · 📍 "+esc(u.city)+'</div><div class="chiprow mt">'+(u.services||[]).map(s=>'<span class="chip p">'+esc(s)+"</span>").join("")+"</div></div></div>";
+  }
+  return '<div class="card dhead"><div class="avatar lg" style="background:var(--primary)">🏛️</div><div style="flex:1"><h2>'+esc(u.org||u.name)+' <span class="vbadge">Admin</span></h2><div class="sub">'+esc(u.name)+" · 📍 "+esc(u.city)+"</div></div></div>";
+}
+
+/* ---------------- WORKER tabs ---------------- */
+function wTab(u){
+  if(state.tab==="jobs")return wJobs(u);
+  if(state.tab==="apps")return wApps(u);
+  if(state.tab==="offers")return wOffers(u);
+  if(state.tab==="msgs")return msgLayout(u);
+  if(state.tab==="cv")return wCV(u);
+  return wWelfare(u);
+}
+function filterBar(kind){const f=kind==="j"?state.jf:state.wf;
+  const skillOpts='<option value="">'+t("all")+"</option>"+SKILLS.map(s=>'<option '+(f.skill===s?"selected":"")+' value="'+s+'">'+s+"</option>").join("");
+  const cityOpts='<option value="">'+t("all")+"</option>"+CITIES.map(c=>'<option '+(f.city===c?"selected":"")+' value="'+c+'">'+c+"</option>").join("");
+  let html='<div class="filterbar"><input class="input grow" placeholder="🔍 '+t("lbl_search")+'" value="'+esc(f.q)+'" oninput="'+(kind==="j"?"setJF":"setWF")+">( 'q',this.value)\">"
+    +'<select class="input" onchange="'+(kind==="j"?"setJF":"setWF")+`( 'skill',this.value)">${skillOpts}</select>`
+    +`<select class="input" onchange="`+(kind==="j"?"setJF":"setWF")+`('city',this.value)">${cityOpts}</select>`;
+  if(kind==="j"){
+    html+=`<select class="input" onchange="setJF('wage',this.value)"><option value="0">${t("wage_any")}</option>`+[400,600,800].map(v=>`<option value="${v}" ${f.wage==String(v)?"selected":""}>₹${v}+</option>`).join("")+"</select>";
+  }else{
+    html+=`<select class="input" onchange="setWF('avail',this.value)"><option value="">${t("lbl_avail")}: ${t("all")}</option>`
+      +[["full",t("av_full")],["part",t("av_part")],["weekend",t("av_wknd")]].map(a=>`<option value="${a[0]}" ${f.avail===a[0]?"selected":""}>${a[1]}</option>`).join("")+"</select>"
+      +`<label class="checkline"><input type="checkbox" ${f.ver?"checked":""} onchange="setWF('ver',this.checked)"> ${t("lbl_veronly")}</label>`;
+  }
+  return html+"</div>";
+}
+function setJF(k,v){state.jf[k]=v;const g=$("#jobGrid");if(g)g.innerHTML=jobGridHtml();}
+function setWF(k,v){state.wf[k]=v;const g=$("#workerGrid");if(g)g.innerHTML=workerGridHtml();}
+function wJobs(u){return filterBar("j")+'<div class="cards" id="jobGrid">'+jobGridHtml()+"</div>";}
+function jobGridHtml(){
+  const u=me(),f=state.jf,q=f.q.toLowerCase();
+  let list=db.jobs.filter(j=>j.status==="open");
+  if(q)list=list.filter(j=>(j.title+" "+j.skill+" "+j.city).toLowerCase().includes(q));
+  if(f.skill)list=list.filter(j=>j.skill===f.skill);
+  if(f.city)list=list.filter(j=>j.city===f.city);
+  if(+f.wage>0)list=list.filter(j=>j.wage>=+f.wage);
+  list.sort((a,b)=>b.created-a.created);
+  if(!list.length)return '<div class="empty" style="grid-column:1/-1">'+t("no_jobs")+"</div>";
+  return list.map(j=>jobCard(j,u)).join("");
+}
+function jobCard(j,u){
+  const c=getUser(j.cid);const applied=db.apps.some(a=>a.jobId===j.id&&u&&a.workerId===u.id);
+  return `<div class="card jcard">
+    <div class="sp-between"><h3>${esc(j.title)}</h3><span class="st st-open">${t("status_open")}</span></div>
+    <div class="chiprow"><span class="chip p">🛠️ ${esc(j.skill)}</span><span class="chip">📍 ${esc(j.city)}</span>
+      <span class="chip a">${money(j.wage)}${j.unit==="day"?t("per_day"):t("per_job")}</span>
+      ${j.days?'<span class="chip">⏱️ '+j.days+" "+t("days")+"</span>":""}</div>
+    <div class="small muted">${esc(j.desc||"").slice(0,110)}${(j.desc||"").length>110?"…":""}</div>
+    <div class="small muted">${t("posted_by")}: <b style="color:var(--text)">${esc(c?(c.company||c.name):"—")}</b> · ${timeAgo(j.created)}</div>
+    <div class="jcard-ft">
+      ${applied?'<span class="chip p">'+t("applied")+"</span>":'<button class="btn btn-p btn-sm" onclick="applyJob(\''+j.id+"')\">"+t("apply")+"</button>"}
+      <button class="btn btn-o btn-sm" onclick="openJob('${j.id}')">${t("btn_details")}</button>
+      ${c?'<button class="btn btn-g btn-sm" onclick="openChat(\''+c.id+"')\">💬 "+t("btn_chat")+"</button>":""}
+    </div></div>`;
+}
+function applyJob(jobId){const u=me();if(!u)return;
+  if(!db.apps.some(a=>a.jobId===jobId&&a.workerId===u.id))db.apps.push({id:uid(),jobId,workerId:u.id,ts:Date.now()});
+  saveDB();toast(t("toast_applied"));render();}
+function openJob(jobId){const j=getJob(jobId);if(!j)return;const c=getUser(j.cid);const u=me();
+  const applied=db.apps.some(a=>a.jobId===j.id&&u&&a.workerId===u.id);
+  const fair=FAIR[j.skill]?"<div class='fair-hint' style='display:block'>⚖️ "+t("fair_hint",FAIR[j.skill][0],FAIR[j.skill][1])+"</div>":"";
+  openModal(`<div class="modal-hd"><b>${esc(j.title)}</b><button class="xbtn" onclick="closeModal()">✕</button></div>
+  <div class="modal-bd">
+    <div class="chiprow mb"><span class="chip p">🛠️ ${esc(j.skill)}</span><span class="chip">📍 ${esc(j.city)}</span>
+      <span class="chip a">${money(j.wage)}${j.unit==="day"?t("per_day"):t("per_job")}</span>
+      ${j.days?'<span class="chip">⏱️ '+j.days+" "+t("days")+"</span>":""}</div>
+    <div class="small muted mb">${t("posted_by")}: <b style="color:var(--text)">${esc(c?(c.company||c.name):"—")}</b> · 📍 ${esc(c?c.city:"")}</div>
+    <p style="font-size:14px">${esc(j.desc)||t("no_desc")}</p>${fair}
+    ${u&&u.role==="worker"?`<div class="mt">${applied?'<span class="chip p">'+t("applied")+"</span>":'<button class="btn btn-p" onclick="applyJob(\''+j.id+'\');closeModal()">'+t("apply_now")+"</button>"}</div>`:""}
+  </div>`);
+}
+function wApps(u){
+  const apps=[];
+  db.apps.filter(a=>a.workerId===u.id).forEach(a=>{const j=getJob(a.jobId);if(j)apps.push({jobId:a.jobId,ts:a.ts});});
+  db.jobs.filter(j=>j.hired===u.id).forEach(j=>{if(!apps.some(x=>x.jobId===j.id)){const acc=db.offers.find(o=>o.jobId===j.id&&o.workerId===u.id&&o.status==="accepted");apps.push({jobId:j.id,ts:acc?acc.ts:j.created});}});
+  apps.sort((a,b)=>b.ts-a.ts);
+  if(!apps.length)return '<div class="empty">'+t("no_apps")+"</div>";
+  return '<div style="display:flex;flex-direction:column;gap:11px">'+apps.map(a=>{
+    const j=getJob(a.jobId);if(!j)return "";const c=getUser(j.cid);
+    let st,extra="";
+    if(j.status==="completed"){st='<span class="st st-done">'+t("status_done")+"</span>";
+      const p=db.payments.find(p=>p.jobId===j.id);
+      extra=(p?'<span class="chip p">'+t("paid_lbl")+" "+money(p.amount)+"</span> ":"")+(!hasReviewed(j.id,u.id)?'<button class="btn btn-ac btn-sm" onclick="openRating(\''+j.id+"','"+j.cid+"')\">⭐ "+t("rate_contractor")+"</button>":"");
+    }else if(j.hired===u.id){st='<span class="st st-hired">'+t("status_hired")+"</span>";}
+    else if(j.hired){st='<span class="st st-rej">'+t("job_full")+"</span>";}
+    else{st='<span class="st st-pend">'+t("st_pending")+"</span>";}
+    return `<div class="card approw">${avatarHtml(c||{id:"x",name:"?"},"")}
+      <div class="grow"><b>${esc(j.title)}</b><div class="small muted">${esc(c?(c.company||c.name):"—")} · 📍 ${esc(j.city)} · ${money(j.wage)}${j.unit==="day"?t("per_day"):t("per_job")} · ${t("applied_on")} ${timeAgo(a.ts)}</div></div>
+      ${st}<div class="row">${extra}<button class="btn btn-g btn-sm" onclick="openChat('${j.cid}')">💬 ${t("btn_chat")}</button></div></div>`;
+  }).join("")+"</div>";
+}
+function wOffers(u){
+  const offs=db.offers.filter(o=>o.workerId===u.id).sort((a,b)=>b.ts-a.ts);
+  if(!offs.length)return '<div class="empty">'+t("no_offers")+"</div>";
+  return '<div class="cards">'+offs.map(o=>{
+    const j=getJob(o.jobId),c=getUser(o.cid);if(!j||!c)return "";
+    let actions;
+    if(o.status==="pending"&&j.status==="open"){actions='<button class="btn btn-p btn-sm" onclick="acceptOffer(\''+o.id+"')\">✓ "+t("accept")+'</button><button class="btn btn-dgr btn-sm" onclick="rejectOffer(\''+o.id+"')\">✕ "+t("reject")+"</button>";}
+    else if(o.status==="accepted"){actions='<span class="st st-acc">'+t("st_accepted")+" ✓</span>";}
+    else if(o.status==="rejected"){actions='<span class="st st-rej">'+t("st_rejected")+"</span>";}
+    else{actions='<span class="st st-done">'+t("job_full")+"</span>";}
+    return `<div class="card ocard">
+      <div class="sp-between"><b style="font-size:13px;color:var(--muted)">${t("offer_lbl")} · ${timeAgo(o.ts)}</b>
+        <span class="chip a">${money(j.wage)}${j.unit==="day"?t("per_day"):t("per_job")}</span></div>
+      <div class="row">${avatarHtml(c,"sm")}<div><b>${esc(c.company||c.name)}</b><div class="small muted">${esc(j.title)} · 📍 ${esc(j.city)}</div></div></div>
+      ${o.msg?'<div class="quote">“'+esc(o.msg)+"”</div>":""}
+      <div class="jcard-ft">${actions}<button class="btn btn-g btn-sm" onclick="openChat('${c.id}')">💬 ${t("btn_chat")}</button></div>
+    </div>`;}).join("")+"</div>";
+}
+function acceptOffer(id){const o=db.offers.find(x=>x.id===id);if(!o)return;const j=getJob(o.jobId);if(!j||j.status!=="open")return;
+  o.status="accepted";j.hired=o.workerId;j.status="hired";
+  db.offers.filter(x=>x.jobId===j.id&&x.id!==id&&x.status==="pending").forEach(x=>x.status="rejected");
+  saveDB();toast(t("toast_offeracc"));render();}
+function rejectOffer(id){const o=db.offers.find(x=>x.id===id);if(o){o.status="rejected";saveDB();toast(t("toast_offerrej"));render();}}
+function wCV(u){return '<div class="sp-between mb"><div><b style="font-size:16px">📄 '+t("cv_lbl")+'</b><div class="small muted">'+t("cv_auto")+'</div></div><button class="btn btn-p btn-sm" onclick="printCV()">'+t("btn_print")+"</button></div>"+cvHtml(u);}
+function cvHtml(w){
+  const rs=reviewsFor(w.id);const r=ratingOf(w.id);
+  return `<div class="cv"><div class="cv-hd">${avatarHtml(w,"lg")}<div style="flex:1">
+    <h3>${esc(w.name)} ${w.verified?"✓":""}</h3>
+    <div class="sub">${t("primary_role")}: <b>${esc(w.skills[0]||"—")}</b> · 📍 ${esc(w.city)} ${w.verified?'· <b>'+t("verified_lbl")+" ✓</b>":""}</div></div></div>
+  <div class="cv-body"><div>
+    <div class="cv-sec"><h4>${t("cv_sum")}</h4>
+      <div class="cv-line"><b>${t("f_skills")}</b><span>${w.skills.map(esc).join(", ")}</span></div>
+      <div class="cv-line"><b>${t("lbl_exp")}</b><span>${w.exp} ${t("yrs")}</span></div>
+      <div class="cv-line"><b>${t("f_avail")}</b><span>${avKey(w.avail)}</span></div>
+      <div class="cv-line"><b>${t("lbl_expected")}</b><span>₹${w.wage} ${t("per_day")}</span></div>
+      ${w.coop?'<div class="cv-line"><b>'+t("coop_member")+'</b><span>'+esc(w.coopId||"✓")+"</span></div>":""}
+      <div class="cv-line"><b>${t("member_since")}</b><span>${new Date(w.ts).toLocaleDateString()}</span></div>
+    </div>
+    <div class="cv-sec"><h4>${t("lbl_contact")}</h4>
+      <div class="cv-line"><b>${t("f_phone")}</b><span>${esc(w.phone||"—")}</span></div>
+      <div class="cv-line"><b>${t("f_email")}</b><span>${esc(w.email)}</span></div>
+      <div class="cv-line"><b>${t("f_city")}</b><span>${esc(w.city)}</span></div>
+    </div></div>
+  <div><div class="cv-sec"><h4>⭐ ${t("lbl_reviews")} ${r!=null?"· "+r.toFixed(1)+" / 5":""}</h4>
+    ${rs.length?rs.slice(0,4).map(rv=>{const c=getUser(rv.from);return '<div class="rev">“'+esc(rv.text)+'”<span class="muted">— '+esc(c?c.name:"?")+" · "+"★".repeat(rv.stars)+" · "+new Date(rv.ts).toLocaleDateString()+"</span></div>";}).join(""):'<div class="small muted">'+t("no_reviews")+"</div>"}
+  </div></div></div>
+  <div class="cv-foot">${t("gen_by")}</div></div>`;
+}
+function printCV(){const u=me();if(!u)return;$("#print-area").innerHTML=cvHtml(u);
+  document.body.classList.add("print-cv");setTimeout(()=>{window.print();},80);
+  window.onafterprint=()=>{document.body.classList.remove("print-cv");$("#print-area").innerHTML="";};}
+function wWelfare(u){
+  const schemes=[["🛡️",t("scheme1_t"),t("scheme1_d")],["🏥",t("scheme2_t"),t("scheme2_d")],["🎓",t("scheme3_t"),t("scheme3_d")],["💰",t("scheme4_t"),t("scheme4_d")]];
+  const fairRows=Object.entries(FAIR).map(([s,r])=>'<tr><td><b>'+s+'</b></td><td>₹'+r[0]+" – ₹"+r[1]+"</td></tr>").join("");
+  const mine=db.reports.filter(r=>r.uid===u.id).sort((a,b)=>b.ts-a.ts);
+  return `<h3 style="margin-bottom:14px">🌿 ${t("wel_title")}</h3>
+  <div class="cards" style="grid-template-columns:1fr 1fr">
+    <div class="card pad"><b>⚖️ ${t("fair_title")}</b><table class="tbl mt"><tr><th>${t("fair_skill")}</th><th>${t("fair_range")}</th></tr>${fairRows}</table></div>
+    <div><div class="card pad mb"><b>🤝 ${t("scheme_t")}</b>
+      <div class="mt">${schemes.map(s=>'<div class="row mb"><div class="feat-ic" style="width:40px;height:40px;font-size:19px;margin:0">'+s[0]+'</div><div><b style="font-size:13.5px">'+s[1]+'</b><div class="small muted">'+s[2]+"</div></div></div>").join("")}</div></div>
+    <div class="card pad"><b>🚨 ${t("report_t")}</b>
+      <form class="mt" onsubmit="return submitReport(event)">
+        <div class="field"><select class="input" id="rp-type"><option value="payment">${t("rt_payment")}</option><option value="workplace">${t("rt_workplace")}</option><option value="other">${t("rt_other")}</option></select></div>
+        <div class="field"><input class="input" id="rp-against" placeholder="${esc(t("f_against"))}"></div>
+        <div class="field"><textarea class="input" id="rp-details" required placeholder="${esc(t("f_report_d"))}"></textarea></div>
+        <button class="btn btn-dgr btn-sm" type="submit">${t("btn_report")}</button></form></div></div></div>
+  <div class="card pad mt-lg"><b>📋 ${t("my_reports")}</b><div class="mt">
+    ${mine.length?mine.map(r=>'<div class="approw card" style="margin-bottom:9px"><div class="grow"><b>'+esc(r.against||"—")+'</b><div class="small muted">'+esc(r.details)+'</div></div><span class="st '+(r.status==="open"?"st-pend":"st-acc")+'">'+(r.status==="open"?t("st_open"):t("st_resolved"))+"</span></div>").join(""):'<div class="small muted">'+t("no_reports")+"</div>"}
+  </div></div>`;
+}
+function submitReport(e){e.preventDefault();const u=me();if(!u)return false;
+  const type=$("#rp-type").value,against=$("#rp-against").value.trim(),details=$("#rp-details").value.trim();
+  if(!details){toast("⚠️ "+t("err_fields"));return false;}
+  db.reports.push({id:uid(),uid:u.id,type,against,details,status:"open",ts:Date.now()});
+  saveDB();toast(t("report_toast"));render();return false;}
+
+/* ---------------- CONTRACTOR tabs ---------------- */
+function cTab(u){
+  if(state.tab==="workers")return cWorkers(u);
+  if(state.tab==="post")return cPost(u);
+  if(state.tab==="jobs")return cJobs(u);
+  if(state.tab==="coffers")return cOffers(u);
+  return msgLayout(u);
+}
+function cWorkers(u){return filterBar("w")+'<div class="cards" id="workerGrid">'+workerGridHtml()+"</div>";}
+function workerGridHtml(){
+  const f=state.wf,q=f.q.toLowerCase();
+  let list=db.users.filter(x=>x.role==="worker");
+  if(f.ver)list=list.filter(w=>w.verified);
+  if(q)list=list.filter(w=>(w.name+" "+w.skills.join(" ")+" "+w.city).toLowerCase().includes(q));
+  if(f.skill)list=list.filter(w=>w.skills.includes(f.skill));
+  if(f.city)list=list.filter(w=>w.city===f.city);
+  if(f.avail)list=list.filter(w=>w.avail===f.avail);
+  if(!list.length)return '<div class="empty" style="grid-column:1/-1">'+t("no_workers")+"</div>";
+  return list.map(w=>`<div class="card wcard">
+    <div class="wcard-hd">${avatarHtml(w)}<div style="flex:1"><b>${esc(w.name)}</b>
+      <div class="small muted">${esc(w.skills.join(", "))} · 📍 ${esc(w.city)}</div></div>
+      ${w.verified?'<span class="vbadge">✓</span>':'<span class="pbadge">⏳</span>'}</div>
+    <div class="row">${starsHtml(w.id)}<span class="chip">💼 ${w.exp} ${t("yrs")}</span><span class="chip a">${money(w.wage)}${t("per_day")}</span><span class="chip">🕐 ${avKey(w.avail)}</span></div>
+    <div class="jcard-ft">
+      <button class="btn btn-o btn-sm" onclick="openWorker('${w.id}')">${t("btn_profile")}</button>
+      <button class="btn btn-p btn-sm" onclick="sendOfferOpen('${w.id}')">📨 ${t("btn_offer")}</button>
+      <button class="btn btn-g btn-sm" onclick="openChat('${w.id}')">💬</button>
+    </div></div>`).join("");
+}
+function openWorker(wid){const w=getUser(wid);if(!w)return;const u=me();
+  openModal(`<div class="modal-hd"><b>${t("btn_profile")}</b><button class="xbtn" onclick="closeModal()">✕</button></div>
+    <div class="modal-bd">${cvHtml(w)}
+    ${u&&u.role==="contractor"?`<div class="row mt"><button class="btn btn-p" onclick="closeModal();sendOfferOpen('${w.id}')">📨 ${t("btn_offer")}</button>
+    <button class="btn btn-o" onclick="closeModal();openChat('${w.id}')">💬 ${t("btn_chat")}</button></div>`:""}
+    </div>`);
+}
+function sendOfferOpen(wid){const u=me();if(!u||u.role!=="contractor")return;
+  const openJobs=db.jobs.filter(j=>j.cid===u.id&&j.status==="open");
+  if(!openJobs.length){toast("⚠️ "+t("no_offer_jobs"));state.tab="post";render();return;}
+  const w=getUser(wid);
+  openModal(`<div class="modal-hd"><b>📨 ${t("btn_offer")} → ${esc(w.name)}</b><button class="xbtn" onclick="closeModal()">✕</button></div>
+  <div class="modal-bd">
+    <div class="field"><label>${t("offer_job_lbl")}</label><select class="input" id="of-job">${openJobs.map(j=>'<option value="'+j.id+'">'+esc(j.title)+" · "+money(j.wage)+(j.unit==="day"?t("per_day"):t("per_job"))+"</option>").join("")}</select></div>
+    <div class="field"><textarea class="input" id="of-msg" placeholder="${esc(t("offer_msg_ph"))}"></textarea></div>
+    <button class="btn btn-p" onclick="submitOffer('${wid}')">${t("btn_send_offer")} →</button>
+  </div>`);
+}
+function submitOffer(wid){const jobId=$("#of-job").value,msg=$("#of-msg").value.trim(),u=me();
+  db.offers.push({id:uid(),jobId,cid:u.id,workerId:wid,msg,status:"pending",ts:Date.now()});
+  saveDB();closeModal();toast(t("offer_sent"));render();}
+function cPost(u){
+  const skillOpts=SKILLS.map(s=>'<option value="'+s+'">'+s+"</option>").join("");
+  const cityOpts=CITIES.map(c=>'<option '+(c===u.city?"selected":"")+' value="'+c+'">'+c+"</option>").join("");
+  return `<div class="card pad" style="max-width:720px"><b style="font-size:16px">📝 ${t("tc_post")}</b>
+  <form class="mt" onsubmit="return postJob(event)">
+    <div class="field"><label>${t("lbl_jobtitle")} *</label><input class="input" id="pj-title" required></div>
+    <div class="form-grid">
+      <div class="field"><label>${t("lbl_skill")} *</label><select class="input" id="pj-skill" onchange="updateFairHint(this.value)">${skillOpts}</select></div>
+      <div class="field"><label>${t("lbl_city")} *</label><select class="input" id="pj-city">${cityOpts}</select></div>
+      <div class="field"><label>${t("lbl_wage_amt")} *</label><input class="input" id="pj-wage" type="number" min="100" value="600" required></div>
+      <div class="field"><label>&nbsp;</label><select class="input" id="pj-unit"><option value="day">${t("unit_day")}</option><option value="job">${t("unit_job")}</option></select></div>
+      <div class="field"><label>${t("f_days")}</label><input class="input" id="pj-days" type="number" min="1" value="1"></div>
+    </div>
+    <div class="fair-hint" id="pj-fair"></div>
+    <div class="field"><label>${t("lbl_desc")}</label><textarea class="input" id="pj-desc"></textarea></div>
+    <button class="btn btn-p btn-lg" type="submit">${t("tc_post")} →</button>
+  </form></div>`;
+}
+function updateFairHint(skill){const el=$("#pj-fair");if(!el)return;const f=FAIR[skill];
+  if(f){el.style.display="block";el.innerHTML="⚖️ "+t("fair_hint",f[0],f[1]);}else el.style.display="none";}
+function postJob(e){e.preventDefault();const u=me();
+  const g=id=>document.getElementById(id).value;
+  const title=g("pj-title").trim(),skill=g("pj-skill"),city=g("pj-city"),wage=+g("pj-wage"),unit=g("pj-unit"),days=+g("pj-days")||1,desc=g("pj-desc").trim();
+  if(!title||!skill||!wage){toast("⚠️ "+t("err_fields"));return false;}
+  db.jobs.push({id:uid(),cid:u.id,title,skill,city,desc,wage,unit,days,status:"open",hired:null,created:Date.now()});
+  saveDB();toast(t("toast_jobposted"));state.tab="jobs";render();return false;}
+function editJobOpen(jobId){const u=me(),j=getJob(jobId);if(!u||!j||j.cid!==u.id)return;
+  const skillOpts=SKILLS.map(s=>'<option '+(s===j.skill?'selected':'')+' value="'+esc(s)+'">'+esc(s)+"</option>").join("");
+  const cityOpts=CITIES.map(c=>'<option '+(c===j.city?'selected':'')+' value="'+esc(c)+'">'+esc(c)+"</option>").join("");
+  openModal(`<div class="modal-hd"><b>✏️ Edit posted job</b><button class="xbtn" onclick="closeModal()">✕</button></div>
+  <div class="modal-bd"><form onsubmit="return updateJob(event,'${jobId}')">
+    <div class="field"><label>${t("lbl_jobtitle")} *</label><input class="input" id="ej-title" required value="${esc(j.title)}"></div>
+    <div class="form-grid">
+      <div class="field"><label>${t("lbl_skill")} *</label><select class="input" id="ej-skill" onchange="updateEditFairHint(this.value)">${skillOpts}</select></div>
+      <div class="field"><label>${t("lbl_city")} *</label><select class="input" id="ej-city">${cityOpts}</select></div>
+      <div class="field"><label>${t("lbl_wage_amt")} *</label><input class="input" id="ej-wage" type="number" min="100" required value="${j.wage}"></div>
+      <div class="field"><label>&nbsp;</label><select class="input" id="ej-unit"><option value="day" ${j.unit==="day"?'selected':''}>${t("unit_day")}</option><option value="job" ${j.unit==="job"?'selected':''}>${t("unit_job")}</option></select></div>
+      <div class="field"><label>${t("f_days")}</label><input class="input" id="ej-days" type="number" min="1" value="${j.days||1}"></div>
+    </div>
+    <div class="fair-hint" id="ej-fair" style="display:block">${FAIR[j.skill]?'⚖️ '+t("fair_hint",FAIR[j.skill][0],FAIR[j.skill][1]):''}</div>
+    <div class="field"><label>${t("lbl_desc")}</label><textarea class="input" id="ej-desc">${esc(j.desc||"")}</textarea></div>
+    <div class="row"><button class="btn btn-p" type="submit">Save changes →</button><button type="button" class="btn btn-dgr" onclick="deleteJob('${jobId}')">🗑️ Delete job</button></div>
+  </form></div>`);
+}
+function updateEditFairHint(skill){const el=$("#ej-fair");if(!el)return;const f=FAIR[skill];el.style.display=f?"block":"none";el.innerHTML=f?"⚖️ "+t("fair_hint",f[0],f[1]):"";}
+function updateJob(e,jobId){e.preventDefault();const u=me(),j=getJob(jobId);if(!u||!j||j.cid!==u.id)return false;
+  const g=id=>document.getElementById(id).value;
+  const title=g("ej-title").trim(),skill=g("ej-skill"),city=g("ej-city"),wage=+g("ej-wage"),unit=g("ej-unit"),days=+g("ej-days")||1,desc=g("ej-desc").trim();
+  if(!title||!skill||!wage){toast("⚠️ "+t("err_fields"));return false;}
+  Object.assign(j,{title,skill,city,wage,unit,days,desc,updated:Date.now()});saveDB();closeModal();toast("Job updated ✓");state.tab="jobs";render();return false;}
+function deleteJob(jobId){const u=me(),j=getJob(jobId);if(!u||!j||j.cid!==u.id)return;
+  const ok=typeof confirm==="function"?confirm("Delete this posted job? Related applications and offers will also be removed."):true;if(!ok)return;
+  db.jobs=db.jobs.filter(x=>x.id!==jobId);db.apps=db.apps.filter(a=>a.jobId!==jobId);db.offers=db.offers.filter(o=>o.jobId!==jobId);db.payments=db.payments.filter(p=>p.jobId!==jobId);db.reviews=db.reviews.filter(r=>r.jobId!==jobId);
+  saveDB();closeModal();toast("Job deleted ✓");state.tab="jobs";render();}
+function cJobs(u){
+  const mine=db.jobs.filter(j=>j.cid===u.id).sort((a,b)=>b.created-a.created);
+  if(!mine.length)return '<div class="empty">'+t("no_jobs")+"</div>";
+  return '<div style="display:flex;flex-direction:column;gap:13px">'+mine.map(j=>myJobCard(j,u)).join("")+"</div>";
+}
+function myJobCard(j,u){
+  const st=j.status==="open"?'<span class="st st-open">'+t("status_open")+"</span>":j.status==="hired"?'<span class="st st-hired">'+t("status_hired")+"</span>":'<span class="st st-done">'+t("status_done")+"</span>";
+  let body="";
+  if(j.status==="open"){
+    const apps=db.apps.filter(a=>a.jobId===j.id);
+    const offs=db.offers.filter(o=>o.jobId===j.id);
+    body='<div class="small muted mb">📨 '+t("applicants_lbl")+": "+apps.length+" · "+t("tc_offers")+": "+offs.length+"</div>"
+      +(apps.length?'<div style="display:flex;flex-direction:column;gap:8px">'+apps.map(a=>{const w=getUser(a.workerId);if(!w)return "";
+        return '<div class="approw card"><span>'+avatarHtml(w,"sm")+'</span><div class="grow"><b>'+esc(w.name)+"</b> "+(w.verified?'<span class="vbadge" style="font-size:10px">✓</span>':'<span class="pbadge" style="font-size:10px">⏳</span>')
+        +'<div class="small muted">'+esc(w.skills.join(", "))+" · "+money(w.wage)+t("per_day")+" · ★ "+(ratingOf(w.id)?ratingOf(w.id).toFixed(1):t("new_lbl"))+'</div></div>'
+        +'<button class="btn btn-o btn-sm" onclick="openWorker(\''+w.id+"')\">"+t("btn_profile")+'</button><button class="btn btn-p btn-sm" onclick="hireWorker(\''+j.id+"','"+w.id+"')\">"+t("btn_hire")+"</button></div>";}).join("")+"</div>":"");
+  }else if(j.status==="hired"){
+    const w=getUser(j.hired);
+    body='<div class="approw card">'+(w?avatarHtml(w,"sm"):"")+'<div class="grow"><b>'+esc(w?w.name:"?")+'</b><div class="small muted">'+esc(w?w.skills.join(", "):"")+'</div></div>'
+      +'<button class="btn btn-ac btn-sm" onclick="completeOpen(\''+j.id+"')\">💵 "+t("btn_complete")+'</button><button class="btn btn-g btn-sm" onclick="openChat(\''+j.hired+"')\">💬</button></div>";
+  }else{
+    const w=getUser(j.hired),p=db.payments.find(p=>p.jobId===j.id);
+    body='<div class="approw card">'+(w?avatarHtml(w,"sm"):"")+'<div class="grow"><b>'+esc(w?w.name:"?")+'</b></div>'
+      +(p?'<span class="chip p">'+t("paid_lbl")+" "+money(p.amount)+"</span>":"")
+      +(j.hired&&!hasReviewed(j.id,u.id)?'<button class="btn btn-ac btn-sm" onclick="openRating(\''+j.id+"','"+j.hired+"')\">⭐ "+t("rate_worker")+"</button>":"")+"</div>";
+  }
+  return `<div class="card pad"><div class="sp-between mb"><div><b style="font-size:15.5px">${esc(j.title)}</b>
+    <div class="chiprow mt"><span class="chip p">🛠️ ${esc(j.skill)}</span><span class="chip">📍 ${esc(j.city)}</span>
+    <span class="chip a">${money(j.wage)}${j.unit==="day"?t("per_day"):t("per_job")}</span>${j.days?'<span class="chip">⏱️ '+j.days+" "+t("days")+"</span>":""} ${fairFlag(j)}</div></div>
+    <div class="row">${st}<button class="btn btn-o btn-sm" onclick="editJobOpen('${j.id}')">✏️ Edit</button><button class="btn btn-dgr btn-sm" onclick="deleteJob('${j.id}')">🗑️ Delete</button></div></div>${body}</div>`;
+}
+function hireWorker(jobId,wid){const j=getJob(jobId);if(!j||j.status!=="open")return;
+  j.hired=wid;j.status="hired";
+  db.offers.filter(o=>o.jobId===jobId&&o.workerId!==wid&&o.status==="pending").forEach(o=>o.status="rejected");
+  saveDB();toast(t("toast_hired"));render();}
+function completeOpen(jobId){const j=getJob(jobId);if(!j)return;state.payJob=jobId;
+  const w=getUser(j.hired);const def=j.unit==="day"?j.wage*(j.days||1):j.wage;
+  openModal(`<div class="modal-hd"><b>💵 ${t("pay_title")}</b><button class="xbtn" onclick="closeModal()">✕</button></div>
+  <div class="modal-bd"><p class="mb"><b>${esc(j.title)}</b> · ${esc(w?w.name:"")}</p>
+    <div class="field"><label>${t("f_amount")}</label><input class="input" id="pay-amt" type="number" min="0" value="${def}"></div>
+    <button class="btn btn-ac" onclick="confirmPay('${jobId}')">${t("btn_pay")} →</button></div>`);
+}
+function confirmPay(jobId){const j=getJob(jobId);const amt=+($("#pay-amt").value||0);
+  db.payments.push({id:uid(),jobId,amount:amt,ts:Date.now()});j.status="completed";
+  saveDB();closeModal();toast(t("pay_toast"));openRating(jobId,j.hired);render();}
+function cOffers(u){
+  const offs=db.offers.filter(o=>o.cid===u.id).sort((a,b)=>b.ts-a.ts);
+  if(!offs.length)return '<div class="empty">'+t("no_coffers")+"</div>";
+  return '<div class="cards">'+offs.map(o=>{const w=getUser(o.workerId),j=getJob(o.jobId);if(!w||!j)return "";
+    const st=o.status==="accepted"?'<span class="st st-acc">'+t("st_accepted")+'</span>':o.status==="rejected"?'<span class="st st-rej">'+t("st_rejected")+'</span>':'<span class="st st-pend">'+t("st_pending")+"</span>";
+    return `<div class="card ocard"><div class="sp-between"><b style="font-size:13px;color:var(--muted)">${timeAgo(o.ts)}</b>${st}</div>
+      <div class="row">${avatarHtml(w,"sm")}<div><b>${esc(w.name)}</b><div class="small muted">${esc(j.title)}</div></div></div>
+      ${o.msg?'<div class="quote">“'+esc(o.msg)+"”</div>":""}
+      <div class="jcard-ft">${o.status==="pending"?'<button class="btn btn-o btn-sm" onclick="editOfferOpen(\''+o.id+'\')">✏️ Edit</button>':''}<button class="btn btn-dgr btn-sm" onclick="deleteOffer(\''+o.id+'\')">🗑️ Delete</button></div></div>`;}).join("")+"</div>";
+}
+function editOfferOpen(offerId){const u=me(),o=db.offers.find(x=>x.id===offerId);if(!u||!o||o.cid!==u.id)return;
+  if(o.status!=="pending"){toast("Only pending offers can be edited");return;}
+  const jobs=db.jobs.filter(j=>j.cid===u.id&&j.status==="open");const w=getUser(o.workerId);
+  openModal(`<div class="modal-hd"><b>✏️ Edit work offer → ${esc(w?w.name:"")}</b><button class="xbtn" onclick="closeModal()">✕</button></div>
+  <div class="modal-bd"><div class="field"><label>${t("offer_job_lbl")}</label><select class="input" id="eo-job">${jobs.map(j=>'<option '+(j.id===o.jobId?'selected':'')+' value="'+j.id+'">'+esc(j.title)+" · "+money(j.wage)+(j.unit==="day"?t("per_day"):t("per_job"))+"</option>").join("")}</select></div>
+    <div class="field"><textarea class="input" id="eo-msg" placeholder="${esc(t("offer_msg_ph"))}">${esc(o.msg||"")}</textarea></div>
+    <div class="row"><button class="btn btn-p" onclick="updateOffer('${offerId}')">Save offer →</button><button class="btn btn-dgr" onclick="deleteOffer('${offerId}')">🗑️ Delete offer</button></div></div>`);
+}
+function updateOffer(offerId){const u=me(),o=db.offers.find(x=>x.id===offerId);if(!u||!o||o.cid!==u.id||o.status!=="pending")return;
+  o.jobId=$("#eo-job").value;o.msg=$("#eo-msg").value.trim();o.updated=Date.now();saveDB();closeModal();toast("Offer updated ✓");state.tab="coffers";render();}
+function deleteOffer(offerId){const u=me(),o=db.offers.find(x=>x.id===offerId);if(!u||!o||o.cid!==u.id)return;
+  const ok=typeof confirm==="function"?confirm("Delete this work offer?"):true;if(!ok)return;
+  db.offers=db.offers.filter(x=>x.id!==offerId);saveDB();closeModal();toast("Offer deleted ✓");state.tab="coffers";render();}
+
+/* ---------------- MESSAGES ---------------- */
+function chatPartners(u){const map={};db.messages.forEach(m=>{if(m.from===u.id)map[m.to]=Math.max(map[m.to]||0,m.ts);if(m.to===u.id)map[m.from]=Math.max(map[m.from]||0,m.ts);});
+  return Object.entries(map).sort((a,b)=>b[1]-a[1]).map(e=>e[0]);}
+function chatContacts(u){
+  const recent=chatPartners(u), seen=new Set(recent);
+  let base=[];
+  if(u.role==="worker") base=db.users.filter(x=>x.role==="contractor");
+  else if(u.role==="contractor") base=db.users.filter(x=>x.role==="worker");
+  else base=[];
+  const extra=base.map(x=>x.id).filter(id=>id!==u.id&&!seen.has(id)).sort((a,b)=>{const A=getUser(a),B=getUser(b);return (A?(A.company||A.name):a).localeCompare(B?(B.company||B.name):b);});
+  return recent.concat(extra);
+}
+function msgLayout(u){
+  const partners=chatContacts(u);
+  if((!state.chatWith||!partners.includes(state.chatWith))&&partners.length)state.chatWith=partners[0];
+  if(!partners.length)return '<div class="empty">'+t("no_threads")+"</div>";
+  return '<div class="chat-wrap"><div class="threads" id="threadList">'+threadsHtml(u)+'</div><div class="chat-pane" id="chatPane">'+chatPaneHtml(u)+"</div></div>";
+}
+function threadsHtml(u){const partners=chatContacts(u);
+  return partners.map(pid=>{const p=getUser(pid);if(!p)return "";
+    const msgs=db.messages.filter(m=>(m.from===u.id&&m.to===pid)||(m.from===pid&&m.to===u.id)).sort((a,b)=>a.ts-b.ts);
+    const last=msgs[msgs.length-1];
+    const label=p.role==="worker"?(p.skills||[]).join(", "):(p.company||p.name);
+    return '<div class="thread '+(state.chatWith===pid?"active":"")+'" onclick="openChat(\''+pid+'\')">'+avatarHtml(p,"sm")
+      +'<div class="grow"><b>'+esc(p.name)+'</b><span class="prev">'+(last?esc(last.text).slice(0,42):'Start chat · '+esc(label).slice(0,34))+"</span></div></div>";}).join("");}
+function chatPaneHtml(u){
+  if(!state.chatWith)return '<div class="empty" style="border:none;margin:auto">'+t("msg_empty")+"</div>";
+  const p=getUser(state.chatWith);if(!p)return "";
+  const msgs=db.messages.filter(m=>(m.from===u.id&&m.to===p.id)||(m.from===p.id&&m.to===u.id)).sort((a,b)=>a.ts-b.ts);
+  return `<div class="chat-hd">${avatarHtml(p,"sm")}<div><div>${esc(p.name)}</div><div class="small muted" style="font-weight:400">${p.role==="worker"?esc(p.skills.join(", ")):esc(p.company||"")}</div></div></div>
+  <div class="chat-body" id="chatBody">${msgs.map(m=>'<div class="bubble '+(m.from===u.id?"me":"them")+'">'+esc(m.text)+"<time>"+timeAgo(m.ts)+"</time></div>").join("")||'<div class="small muted" style="margin:auto">'+t("msg_empty")+"</div>"}</div>
+  <div class="chat-in"><input class="input" id="msgInput" placeholder="${esc(t("msg_ph"))}" onkeydown="if(event.key==='Enter'){event.preventDefault();sendMsg()}">
+  <button class="btn btn-p" onclick="sendMsg()">${t("btn_send")} ➤</button></div>`;}
+function openChat(uid){const u=me();if(!u||u.role==="admin")return;state.chatWith=uid;
+  if(state.view!=="dash"){state.view="dash";state.tab="msgs";}else state.tab="msgs";
+  render();}
+function sendMsg(){const u=me();const el=$("#msgInput");if(!u||!el||!state.chatWith)return;
+  const txt=el.value.trim();if(!txt)return;
+  db.messages.push({id:uid(),from:u.id,to:state.chatWith,text:txt,ts:Date.now()});saveDB();
+  const pane=$("#chatPane");if(pane){pane.innerHTML=chatPaneHtml(u);const tl=$("#threadList");if(tl)tl.innerHTML=threadsHtml(u);
+    const body=$("#chatBody");if(body)body.scrollTop=body.scrollHeight;const ni=$("#msgInput");if(ni)ni.focus();}}
+
+/* ---------------- RATINGS ---------------- */
+function openRating(jobId,toId){const u=me();if(!u)return;
+  if(hasReviewed(jobId,u.id)){return;}
+  state.rate={jobId,toId};state.stars=5;renderRatingModal();}
+function renderRatingModal(){const tgt=getUser(state.rate.toId);
+  openModal(`<div class="modal-hd"><b>⭐ ${t("rate_title")}</b><button class="xbtn" onclick="closeModal()">✕</button></div>
+  <div class="modal-bd" style="text-align:center">
+    <div class="row" style="justify-content:center">${avatarHtml(tgt)}<b>${esc(tgt.name)}</b></div>
+    <div class="rate-stars">${[1,2,3,4,5].map(n=>'<span class="'+(n<=state.stars?"on":"")+'" onclick="setStars('+n+')">★</span>').join("")}</div>
+    <textarea class="input" id="rate-txt" placeholder="${esc(t("f_comment"))}"></textarea>
+    <button class="btn btn-p mt" onclick="submitRating()">${t("btn_rate")} →</button></div>`);}
+function setStars(n){state.stars=n;renderRatingModal();}
+function submitRating(){const u=me();const txt=$("#rate-txt").value.trim();
+  db.reviews.push({id:uid(),jobId:state.rate.jobId,from:u.id,to:state.rate.toId,stars:state.stars,text:txt,ts:Date.now()});
+  saveDB();closeModal();toast(t("rate_toast"));render();}
+
+/* ---------------- ADMIN tabs ---------------- */
+function aTab(u){
+  if(state.tab==="over")return aOver();
+  if(state.tab==="ver")return aVer();
+  if(state.tab==="jobs")return aJobs();
+  return aComp();
+}
+function aOver(){
+  const workers=db.users.filter(x=>x.role==="worker");
+  const cards=[[workers.length,t("s_workers")],[workers.filter(w=>w.verified).length,t("s_verified")],[workers.filter(w=>!w.verified).length,t("s_pending")],
+    [db.users.filter(x=>x.role==="contractor").length,t("s_contractors")],[db.jobs.filter(j=>j.status!=="completed").length,t("s_activejobs")],
+    [db.jobs.filter(j=>j.status==="completed").length,t("s_donejobs")],[db.jobs.length,t("s_jobs")],[db.reports.filter(r=>r.status==="open").length,t("s_complaints")]];
+  return '<h3 class="mb">🏛️ '+t("ad_over")+'</h3><div class="stat-grid">'+cards.map(c=>'<div class="card scard"><b>'+c[0]+"</b><span>"+c[1]+"</span></div>").join("")+"</div>";
+}
+function aVer(){
+  const pend=db.users.filter(x=>x.role==="worker"&&!x.verified);
+  if(!pend.length)return '<div class="empty">'+t("ad_none")+"</div>";
+  return '<h3 class="mb">🔍 '+t("ad_pending_t")+'</h3><div style="display:flex;flex-direction:column;gap:11px">'+pend.map(w=>
+    `<div class="card approw">${avatarHtml(w)}<div class="grow"><b>${esc(w.name)}</b>
+      <div class="small muted">${esc(w.skills.join(", "))} · 📍 ${esc(w.city)} · 💼 ${w.exp} ${t("yrs")} · ${money(w.wage)}${t("per_day")}
+      ${w.coop?" · 🤝 "+esc(w.coopId||t("coop_member")):""}</div></div>
+      <button class="btn btn-o btn-sm" onclick="openWorker('${w.id}')">${t("btn_profile")}</button>
+      <button class="btn btn-p btn-sm" onclick="adminVerify('${w.id}')">✓ ${t("btn_verify")}</button></div>`).join("")+"</div>";
+}
+function adminVerify(uid_){const w=getUser(uid_);if(w){w.verified=true;saveDB();toast(t("toast_verified"));render();}}
+function aJobs(){
+  const rows=db.jobs.slice().sort((a,b)=>b.created-a.created).map(j=>{const c=getUser(j.cid),w=j.hired?getUser(j.hired):null;
+    return `<tr><td><b>${esc(j.title)}</b><div class="small muted">${esc(j.skill)} · 📍 ${esc(j.city)}</div></td>
+      <td>${esc(c?(c.company||c.name):"—")}</td><td>${esc(w?w.name:"—")}</td>
+      <td>${money(j.wage)}${j.unit==="day"?t("per_day"):t("per_job")} ${fairFlag(j)}</td>
+      <td>${j.status==="open"?'<span class="st st-open">'+t("status_open")+"</span>":j.status==="hired"?'<span class="st st-hired">'+t("status_hired")+"</span>":'<span class="st st-done">'+t("status_done")+"</span>"}</td></tr>`;}).join("");
+  return '<h3 class="mb">📊 '+t("ad_jobs_t")+'</h3><div class="card" style="overflow-x:auto"><table class="tbl"><tr><th>'+t("lbl_jobtitle")+'</th><th>'+t("role_contractor")+'</th><th>'+t("role_worker")+'</th><th>'+t("lbl_wage")+"</th><th>Status</th></tr>"+rows+"</table></div>";
+}
+function aComp(){
+  const reps=db.reports.slice().sort((a,b)=>b.ts-a.ts);
+  if(!reps.length)return '<div class="empty">'+t("ad_nocomp")+"</div>";
+  const tname={payment:t("rt_payment"),workplace:t("rt_workplace"),other:t("rt_other")};
+  return '<h3 class="mb">🚨 '+t("ad_comp_t")+'</h3>'+reps.map(r=>{const rep=getUser(r.uid);
+    return `<div class="card comprow"><div class="sp-between"><div class="row"><span class="chip ${r.type==="payment"?"a":"p"}">${tname[r.type]||r.type}</span>
+      <b>${esc(r.against||"—")}</b></div>${r.status==="open"?'<span class="st st-pend">'+t("st_open")+'</span>':'<span class="st st-acc">'+t("st_resolved")+"</span>"}</div>
+      <div style="font-size:13.5px">${esc(r.details)}</div>
+      <div class="sp-between"><span class="small muted">${t("reported_by")}: <b style="color:var(--text)">${esc(rep?rep.name:"?")}</b> · ${timeAgo(r.ts)}</span>
+      ${r.status==="open"?'<button class="btn btn-p btn-sm" onclick="resolveReport(\''+r.id+"')\">✓ "+t("btn_resolve")+"</button>":""}</div></div>`;}).join("");
+}
+function resolveReport(id){const r=db.reports.find(x=>x.id===id);if(r){r.status="resolved";saveDB();toast(t("toast_resolved"));render();}}
+
+/* ================================================================
+   RENDER ROOT
+================================================================ */
+function render(){
+  renderHeader();
+  const u=me();let html="";
+  if(state.view==="login")html=vLogin();
+  else if(state.view==="signup")html=vSignup();
+  else if(state.view==="dash")html=u?vDash(u):vHome();
+  else html=vHome();
+  $("#view").innerHTML=html;
+  if(state.tab==="msgs"&&u){const body=$("#chatBody");if(body)body.scrollTop=body.scrollHeight;}
+}
+
+/* ---------------- Init ---------------- */
+loadDB();applyTheme();document.documentElement.lang=lang==="or"?"or":lang;render();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3d99da0ad2d8f9e',t:'MTc4OTgzMTY1OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
