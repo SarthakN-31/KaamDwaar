@@ -39,13 +39,13 @@ a{color:inherit;text-decoration:none;cursor:pointer}
 /* ============================= HEADER ============================= */
 .topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 86%,transparent);
   backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
-.topbar .container{display:flex;align-items:center;justify-content:space-between;gap:12px;height:112px}
+.topbar .container{max-width:none;margin:0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;height:138px;padding:10px 18px 0 18px}
 .brand{display:flex;align-items:center;gap:10px;cursor:pointer}
-.brand-logo{height:92px;width:auto;display:block}
-footer .brand-logo{height:72px}
+.brand-logo{height:108px;width:auto;display:block}
+footer .brand-logo{height:82px}
 .brand-txt b{font-size:17px;display:block;line-height:1.1}
 .brand-txt span{font-size:11px;color:var(--muted);letter-spacing:.4px}
-.nav-actions{display:flex;align-items:center;gap:8px}
+.nav-actions{display:flex;align-items:center;gap:8px;margin-top:18px}
 .lang-sel{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:6px 8px;color:var(--text)}
 .icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);
   display:inline-flex;align-items:center;justify-content:center;color:var(--text)}
@@ -55,9 +55,9 @@ footer .brand-logo{height:72px}
 .user-chip .role-tag{font-size:10.5px;color:var(--muted);font-weight:600;display:block;line-height:1}
 
 @media(max-width:760px){
-  .topbar .container{height:96px}
-  .brand-logo{height:74px;max-width:72vw}
-  footer .brand-logo{height:58px;max-width:85vw}
+  .topbar .container{height:108px;padding:8px 12px 0 12px}
+  .brand-logo{height:92px;max-width:76vw}
+  footer .brand-logo{height:64px;max-width:88vw}
 }
 
 /* ============================= BUTTONS ============================= */
@@ -318,7 +318,7 @@ footer .brand{justify-content:center;margin-bottom:8px}
 <footer>
   <div class="container">
     <div class="brand" onclick="go('home')">
-      <svg class="brand-logo" width="400" height="72" viewBox="70 70 1360 390" role="img" aria-label="KaamDwaar logo" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="kdgf" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#0F766E"/><stop offset="1" stop-color="#22C55E"/></linearGradient></defs><g transform="translate(95 95) scale(.78)"><rect width="330" height="330" rx="78" fill="#ECFDF5"/><path d="M86 273V150C86 83 128 48 165 48s79 35 79 102v123" fill="none" stroke="url(#kdgf)" stroke-width="34" stroke-linecap="round"/><path d="M121 273V162c0-38 23-60 44-60s44 22 44 60v111" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="8"/><path d="M165 163c-18 51-38 86-65 110h130c-27-24-47-59-65-110z" fill="#D1FAE5"/><rect x="106" y="210" width="118" height="76" rx="18" fill="#0F766E"/><path d="M140 210v-17c0-16 13-29 29-29h-8c16 0 29 13 29 29v17" fill="none" stroke="#0F766E" stroke-width="17" stroke-linecap="round"/><rect x="154" y="210" width="23" height="76" rx="7" fill="#22C55E"/><circle cx="165" cy="248" r="9" fill="#FFFFFF"/></g><text x="385" y="195" font-family="Arial,Helvetica,sans-serif" font-size="118" font-weight="900" letter-spacing="-2.5" fill="#0F172A">Kaam<tspan fill="#0F766E">Dwaar</tspan></text><text x="392" y="270" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="900" fill="#0F766E">Gateway to fair work</text><text x="392" y="342" font-family="Arial,Helvetica,sans-serif" font-size="40" font-weight="900" fill="#475569">Trusted workers · Verified jobs · Cooperative support</text></svg>
+      <svg class="brand-logo" width="398" height="82" viewBox="0 0 1320 380" role="img" aria-label="KaamDwaar logo" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="kdgf" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#0F766E"/><stop offset="1" stop-color="#22C55E"/></linearGradient></defs><g transform="translate(18 34) scale(.86)"><rect width="300" height="300" rx="72" fill="#ECFDF5"/><path d="M78 248V136C78 76 116 44 150 44s72 32 72 92v112" fill="none" stroke="url(#kdgf)" stroke-width="31" stroke-linecap="round"/><path d="M110 248V148c0-35 21-55 40-55s40 20 40 55v100" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="8"/><path d="M150 148c-16 46-35 78-59 100h118c-24-22-43-54-59-100z" fill="#D1FAE5"/><rect x="96" y="190" width="108" height="70" rx="17" fill="#0F766E"/><path d="M127 190v-16c0-15 12-27 27-27h-8c15 0 27 12 27 27v16" fill="none" stroke="#0F766E" stroke-width="16" stroke-linecap="round"/><rect x="140" y="190" width="21" height="70" rx="7" fill="#22C55E"/><circle cx="150" cy="225" r="8" fill="#FFFFFF"/></g><g text-anchor="start"><text x="330" y="116" font-family="Arial,Helvetica,sans-serif" font-size="112" font-weight="900" letter-spacing="-2.4" fill="#0F172A">Kaam<tspan fill="#0F766E">Dwaar</tspan></text><text x="336" y="182" font-family="Arial,Helvetica,sans-serif" font-size="48" font-weight="900" fill="#0F766E">Gateway to fair work</text><text x="336" y="242" font-family="Arial,Helvetica,sans-serif" font-size="36" font-weight="900" fill="#475569">Trusted workers · Verified jobs · Cooperative support</text></g></svg>
     </div>
     <div id="foot-tag"></div>
     <div id="foot-note" class="small" style="margin-top:4px"></div>
@@ -456,13 +456,13 @@ function themeIcon(){return theme==="light"
  ?'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>'
  :'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>';}
 function logoSvg(size){
-  const h=size||92,w=Math.round(h*5.55);
-  return '<svg class="brand-logo" width="'+w+'" height="'+h+'" viewBox="70 70 1360 390" role="img" aria-label="KaamDwaar logo" xmlns="http://www.w3.org/2000/svg">'
+  const h=size||108,w=Math.round(h*4.85);
+  return '<svg class="brand-logo" width="'+w+'" height="'+h+'" viewBox="0 0 1320 380" role="img" aria-label="KaamDwaar logo" xmlns="http://www.w3.org/2000/svg">'
     +'<defs><linearGradient id="kdg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#0F766E"/><stop offset="1" stop-color="#22C55E"/></linearGradient><filter id="kds" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0F172A" flood-opacity=".14"/></filter></defs>'
-    +'<g transform="translate(95 95) scale(.78)" filter="url(#kds)"><rect width="330" height="330" rx="78" fill="#ECFDF5"/><path d="M86 273V150C86 83 128 48 165 48s79 35 79 102v123" fill="none" stroke="url(#kdg)" stroke-width="34" stroke-linecap="round"/><path d="M121 273V162c0-38 23-60 44-60s44 22 44 60v111" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="8"/><path d="M165 163c-18 51-38 86-65 110h130c-27-24-47-59-65-110z" fill="#D1FAE5"/><rect x="106" y="210" width="118" height="76" rx="18" fill="#0F766E"/><path d="M140 210v-17c0-16 13-29 29-29h-8c16 0 29 13 29 29v17" fill="none" stroke="#0F766E" stroke-width="17" stroke-linecap="round"/><rect x="154" y="210" width="23" height="76" rx="7" fill="#22C55E"/><circle cx="165" cy="248" r="9" fill="#FFFFFF"/></g>'
-    +'<text x="385" y="195" font-family="Arial,Helvetica,sans-serif" font-size="118" font-weight="900" letter-spacing="-2.5" fill="#0F172A">Kaam<tspan fill="#0F766E">Dwaar</tspan></text>'
-    +'<text x="392" y="270" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="900" fill="#0F766E">Gateway to fair work</text>'
-    +'<text x="392" y="342" font-family="Arial,Helvetica,sans-serif" font-size="40" font-weight="900" fill="#475569">Trusted workers · Verified jobs · Cooperative support</text>'
+    +'<g transform="translate(18 34) scale(.86)" filter="url(#kds)"><rect width="300" height="300" rx="72" fill="#ECFDF5"/><path d="M78 248V136C78 76 116 44 150 44s72 32 72 92v112" fill="none" stroke="url(#kdg)" stroke-width="31" stroke-linecap="round"/><path d="M110 248V148c0-35 21-55 40-55s40 20 40 55v100" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="8"/><path d="M150 148c-16 46-35 78-59 100h118c-24-22-43-54-59-100z" fill="#D1FAE5"/><rect x="96" y="190" width="108" height="70" rx="17" fill="#0F766E"/><path d="M127 190v-16c0-15 12-27 27-27h-8c15 0 27 12 27 27v16" fill="none" stroke="#0F766E" stroke-width="16" stroke-linecap="round"/><rect x="140" y="190" width="21" height="70" rx="7" fill="#22C55E"/><circle cx="150" cy="225" r="8" fill="#FFFFFF"/></g>'
+    +'<g text-anchor="start"><text x="330" y="116" font-family="Arial,Helvetica,sans-serif" font-size="112" font-weight="900" letter-spacing="-2.4" fill="#0F172A">Kaam<tspan fill="#0F766E">Dwaar</tspan></text>'
+    +'<text x="336" y="182" font-family="Arial,Helvetica,sans-serif" font-size="48" font-weight="900" fill="#0F766E">Gateway to fair work</text>'
+    +'<text x="336" y="242" font-family="Arial,Helvetica,sans-serif" font-size="36" font-weight="900" fill="#475569">Trusted workers · Verified jobs · Cooperative support</text></g>'
     +'</svg>';
 }
 
@@ -490,7 +490,7 @@ function renderHeader(){const u=me();
       +'<a class="btn btn-p btn-sm" onclick="go(\'signup\')">'+t("nav_signup")+"</a>";
   }
   $("#topbar").innerHTML='<div class="container">'
-    +'<a class="brand" onclick="go(\'home\')">'+logoSvg(92)+'</a>'
+    +'<a class="brand" onclick="go(\'home\')">'+logoSvg(108)+'</a>'
     +'<div class="nav-actions">'+langSel+'<button class="icon-btn" onclick="toggleTheme()" title="Theme">'+themeIcon()+"</button>"+right+"</div></div>";
   $("#foot-tag").textContent="“"+t("hero_t1")+" "+t("hero_t2")+" "+t("hero_t3")+"”";
   $("#foot-note").textContent=t("foot_note");
@@ -1147,5 +1147,5 @@ function render(){
 /* ---------------- Init ---------------- */
 loadDB();applyTheme();document.documentElement.lang=lang==="or"?"or":lang;render();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3d99da0ad2d8f9e',t:'MTc4OTgzMTY1OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3dbbfd53c6e867b',t:'MTc4OTg1NDAzMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
